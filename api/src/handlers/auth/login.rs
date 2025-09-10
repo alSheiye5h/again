@@ -1,90 +1,80 @@
 use actix_web::{web, HttpResponse, Responder};
+use actix_web::cookie::Cookie;
 use sqlx::PgPool;
-use serde::{Deserialize, Serialize};
-use serde_json::json;
+use api::models::userStruct::UserLogin;
+use serde::Serialize;
 
-/// Input from the user
-#[derive(Debug, Deserialize)]
-pub struct UserLogin {
-    pub username: String,
-    pub email: String,
-    pub password: String,
-}
-
-/// Database user representation
-#[derive(Debug, sqlx::FromRow)]
-pub struct DbUser {
-    pub id: i32,
-    pub username: String,
-    pub email: Option<String>, // Nullable in DB
-    pub password: String,
+#[derive(Serialize, sqlx::FromRow)]
+struct DbUser {
+    id: i32,
+    username: String,
+    email: String,
+    password: String,
 }
 
 pub async fn login_user(
     db_pool: web::Data<PgPool>,
-    user: web::Json<UserLogin>,
+    user_data: web::Json<UserLogin>,
 ) -> impl Responder {
-    let user_data = user.into_inner();
-
-    // Input validation
     if user_data.password.trim().is_empty() {
         return HttpResponse::BadRequest().body("Password is required");
     }
 
-    let has_username = !user_data.username.trim().is_empty();
-    let has_email = !user_data.email.trim().is_empty();
+    let has_username = user_data.username
+        .as_ref()
+        .map(|s| !s.trim().is_empty())
+        .unwrap_or(false);
 
-    if (has_username && has_email) || (!has_username && !has_email) {
-        return HttpResponse::BadRequest()
-            .body("Provide either username or email, not both / neither");
-    }
+    let has_email = user_data.email
+        .as_ref()
+        .map(|s| !s.trim().is_empty())
+        .unwrap_or(false);
 
-    // Query user
-    let query_result: Result<Option<DbUser>, sqlx::Error> = if has_username {
-        sqlx::query_as!(
-            DbUser,
-            "SELECT id, username, email, password FROM users WHERE username = $1",
-            user_data.username
-        )
-        .fetch_optional(db_pool.get_ref())
-        .await
-    } else {
-        sqlx::query_as!(
-            DbUser,
-            "SELECT id, username, email, password FROM users WHERE email = $1",
-            user_data.email
-        )
-        .fetch_optional(db_pool.get_ref())
-        .await
-    };
-
-    // Handle result
-    match query_result {
-        Ok(Some(record)) => {
-            if record.password == user_data.password {
-                HttpResponse::Ok().json(json!({
-                    "status": "success",
-                    "user_id": record.id,
-                    "username": record.username,
-                    "email": record.email.unwrap_or_default()
-                }))
+    match (has_username, has_email) {
+        (true, false) | (false, true) => {
+            let user_result: Result<Option<DbUser>, sqlx::Error> = if has_username {
+                sqlx::query_as::<_, DbUser>(
+                    "SELECT id, username, email, password FROM users WHERE username = $1",
+                )
+                .bind(&user_data.username)
+                .fetch_optional(db_pool.get_ref())
+                .await
             } else {
-                HttpResponse::Unauthorized().json(json!({
-                    "status": "error",
-                    "message": "Incorrect password"
-                }))
+                sqlx::query_as::<_, DbUser>(
+                    "SELECT id, username, email, password FROM users WHERE email = $1",
+                )
+                .bind(&user_data.email)
+                .fetch_optional(db_pool.get_ref())
+                .await
+            };
+
+            let user = match user_result {
+                Ok(opt) => opt,
+                Err(_) => return HttpResponse::InternalServerError().body("Database query failed"),
+            };
+
+            match user {
+                Some(u) => {
+                    if u.password == user_data.password {
+                        // Set cookie
+                        let cookie = Cookie::build("user_id", u.id.to_string())
+                            .path("/")
+                            .http_only(true)
+                            .finish();
+
+                        HttpResponse::Ok()
+                            .cookie(cookie)
+                            .json(u)
+                    } else {
+                        HttpResponse::Unauthorized().body("Invalid password")
+                    }
+                }
+                None => HttpResponse::NotFound().body("User not found"),
             }
         }
-        Ok(None) => HttpResponse::NotFound().json(json!({
-            "status": "error",
-            "message": "User not found"
-        })),
-        Err(err) => {
-            eprintln!("Database error: {:?}", err);
-            HttpResponse::InternalServerError().json(json!({
-                "status": "error",
-                "message": "Database error"
-            }))
-        }
+        (true, true) => HttpResponse::BadRequest().body("Provide either username or email, not both"),
+        (false, false) => HttpResponse::BadRequest().body("Either username or email is required"),
     }
 }
+
+
