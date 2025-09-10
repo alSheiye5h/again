@@ -1,2 +1,9 @@
-/target
-api/
+# Ignore all folders named 'target'
+target/
+
+# Ignore 'target' folders recursively in subdirectories
+**/target/
+
+# Optional: ignore common build outputs in Rust
+**/target/*
+

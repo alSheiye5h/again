@@ -1,0 +1,18 @@
+[package]
+name = "api"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+database = { path = "../database" }
+actix-web = "4"
+tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
+serde = { version = "1.0", features = ["derive"] }
+sqlx = { version = "0.8.6", features = [
+    "runtime-tokio-rustls", # async runtime with TLS
+    "postgres",             # PostgreSQL driver
+    "macros",               # compile-time checked queries
+    "uuid",                 # if you use UUIDs in tables
+    "chrono",               # if you use dates/timestamps
+    "migrate"               # if you want to use sqlx migrations
+] }

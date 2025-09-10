@@ -1,0 +1,11 @@
+pub mod userStruct;
+pub mod walletStruct;
+pub mod clubStruct;
+pub mod discussionStruct;
+pub mod eventStruct;
+pub mod postStruct;
+pub mod announcementStruct;
+pub mod communitieStruct;
+pub mod ama_poolStruct;
+pub mod rsvpStruct;
+
