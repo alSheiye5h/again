@@ -1,4 +1,4 @@
-use actix_web::{web, App, HttpServer};
+use actix_web::{App, HttpServer};
 mod handlers;
 mod routes; // import the routes folder
 use database::connect_to_db; // <- now it works

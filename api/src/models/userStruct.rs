@@ -12,7 +12,6 @@ pub struct User {
     pub password: String,
     pub profil_pic: String,
     pub bio: String,
-    pub last_seen: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
