@@ -1,0 +1,19 @@
+[package]
+name = "database"
+version = "0.1.0"
+edition = "2024"
+
+[lib] 
+path = "src/lib.rs"
+
+[dependencies]
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+sqlx = { version = "0.8.6", features = [
+    "runtime-tokio-rustls", # async runtime with TLS
+    "postgres",             # PostgreSQL driver
+    "macros",               # compile-time checked queries
+    "uuid",                 # if you use UUIDs in tables
+    "chrono",               # if you use dates/timestamps
+    "migrate"               # if you want to use sqlx migrations
+] }
+dotenvy = "0.15" 

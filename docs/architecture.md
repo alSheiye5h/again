@@ -1,0 +1,52 @@
+# my_workspace
+- .github  
+  - workflows  
+    - ci.yml  
+  - comment: "GitHub Actions CI"
+- docs  
+  - architecture.md  
+  - comment: "Architecture docs and design decisions"
+- scripts  
+  - migrate.sh  
+  - seed.sh  
+  - comment: "Helper scripts for migrations and seeding"
+- core (library crate)  
+  - src  
+    - lib.rs: "Public API surface"  
+    - models.rs: "Data models"  
+    - services  
+      - mod.rs  
+      - user_service.rs: "Business logic & DB calls"  
+    - utils.rs: "Helper functions"  
+  - comment: "Core business logic layer; exposes services to API & CLI"
+- api (binary crate)  
+  - src  
+    - main.rs: "Entrypoint; sets up HTTP server"  
+    - routes.rs: "Route definitions"  
+    - handlers  
+      - auth.rs: "HTTP handlers call core services"  
+      - user.rs  
+    - middleware.rs  
+  - comment: "Thin HTTP layer: handles requests → delegates to core → formats responses"
+- cli (binary crate)  
+  - src  
+    - main.rs: "Entrypoint; CLI parsing → delegates to core"  
+  - comment: "Command‑line interface for admin & maintenance tasks"
+- database (library crate)  
+  - migrations  
+    - 0001_initial.sql  
+    - 0002_add_users.sql  
+  - src  
+    - lib.rs: "DB migration & helper functions"  
+  - comment: "Database schema migrations & programmatic helpers"
+- examples  
+  - simple_use.rs  
+  - advanced_demo.rs  
+  - comment: "Example usage of core library"
+- benches  
+  - my_benchmark.rs  
+  - comment: "Performance benchmarks (Criterion)"
+- tests  
+  - integration_test.rs  
+  - helpers.rs  
+  - comment: "Integration tests treating workspace as external crate"

@@ -1,0 +1,9 @@
+# my_workspace/Cargo.toml
+[workspace]
+members = [
+    "core_lib",
+    "api",
+    "cli",
+    "database"
+]
+resolver = "3"
