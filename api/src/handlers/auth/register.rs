@@ -8,9 +8,10 @@ pub async fn register_user(
     user: web::Json<User>
 ) -> impl Responder {
 
+    println!("touch");
     let user_data = user.into_inner();
 
-    // Insert into database (without last_seen)
+    // Insert into database
     let result = sqlx::query!(
         r#"
         INSERT INTO users (username, name, email, password, profil_pic, bio)
@@ -28,13 +29,25 @@ pub async fn register_user(
     .await;
 
     match result {
-        Ok(record) => HttpResponse::Ok().json(json!({
-            "status": "success",
-            "user_id": record.id
-        })),
+        Ok(record) => {
+            // Print the record to the console
+            println!("Inserted user record: {:?}", record);
+
+            // Return success response
+            HttpResponse::Ok().json(json!({
+                "status": "success",
+                "user_id": record.id
+            }))
+        }
         Err(err) => {
+            // Print the error in the console
             eprintln!("Database insert error: {:?}", err);
-            HttpResponse::InternalServerError().body("Error inserting user")
+
+            // Return the error in the JSON response
+            HttpResponse::Ok().json(json!({
+                "status": "error",
+                "message": format!("{}", err)
+            }))
         }
     }
 }

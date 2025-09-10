@@ -1,0 +1,64 @@
+                                      Table "public.users"
+   Column   |            Type             | Collation | Nullable |           Default            
+------------+-----------------------------+-----------+----------+------------------------------
+ id         | integer                     |           | not null | generated always as identity
+ username   | character varying           |           | not null | 
+ name       | character varying           |           |          | 
+ email      | character varying           |           |          | 
+ password   | character varying           |           |          | 
+ profil_pic | character varying           |           |          | 
+ bio        | text                        |           |          | 
+ last_seen  | timestamp without time zone |           |          | 
+Indexes:
+    "users_pkey" PRIMARY KEY, btree (id)
+    "users_email_key" UNIQUE CONSTRAINT, btree (email)
+Referenced by:
+    TABLE "ama" CONSTRAINT "ama_created_by_fkey" FOREIGN KEY (created_by) REFERENCES users(id)
+    TABLE "ama_react" CONSTRAINT "ama_react_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
+    TABLE "charity_event_donation" CONSTRAINT "charity_event_donation_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
+    TABLE "charity_event" CONSTRAINT "charity_event_organizer_fkey" FOREIGN KEY (organizer) REFERENCES users(id)
+    TABLE "charity_event_rsvp" CONSTRAINT "charity_event_rsvp_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
+    TABLE "charity_event_volunteers" CONSTRAINT "charity_event_volunteers_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
+    TABLE "club_ama" CONSTRAINT "club_ama_created_by_fkey" FOREIGN KEY (created_by) REFERENCES users(id)
+    TABLE "club_community_ama" CONSTRAINT "club_community_ama_created_by_fkey" FOREIGN KEY (created_by) REFERENCES users(id)
+    TABLE "club_community" CONSTRAINT "club_community_created_by_fkey" FOREIGN KEY (created_by) REFERENCES users(id)
+    TABLE "club_community_pool" CONSTRAINT "club_community_pool_created_by_fkey" FOREIGN KEY (created_by) REFERENCES users(id)
+    TABLE "club_discussion" CONSTRAINT "club_discussion_head_fkey" FOREIGN KEY (head) REFERENCES users(id)
+    TABLE "club_members" CONSTRAINT "club_members_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
+    TABLE "club_pool" CONSTRAINT "club_pool_created_by_fkey" FOREIGN KEY (created_by) REFERENCES users(id)
+    TABLE "club_post" CONSTRAINT "club_post_created_by_fkey" FOREIGN KEY (created_by) REFERENCES users(id)
+    TABLE "club_staff" CONSTRAINT "club_staff_promoted_by_fkey" FOREIGN KEY (promoted_by) REFERENCES users(id)
+    TABLE "club_staff" CONSTRAINT "club_staff_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
+    TABLE "community_ama" CONSTRAINT "community_ama_created_by_fkey" FOREIGN KEY (created_by) REFERENCES users(id)
+    TABLE "community" CONSTRAINT "community_created_by_fkey" FOREIGN KEY (created_by) REFERENCES users(id)
+    TABLE "community_discussion" CONSTRAINT "community_discussion_head_fkey" FOREIGN KEY (head) REFERENCES users(id)
+    TABLE "community_members" CONSTRAINT "community_members_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
+    TABLE "community_pool" CONSTRAINT "community_pool_created_by_fkey" FOREIGN KEY (created_by) REFERENCES users(id)
+    TABLE "community_post" CONSTRAINT "community_post_created_by_fkey" FOREIGN KEY (created_by) REFERENCES users(id)
+    TABLE "community_staff" CONSTRAINT "community_staff_promoted_by_fkey" FOREIGN KEY (promoted_by) REFERENCES users(id)
+    TABLE "community_staff" CONSTRAINT "community_staff_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
+    TABLE "discussion" CONSTRAINT "discussion_admin_fkey" FOREIGN KEY (admin) REFERENCES users(id)
+    TABLE "discussion_ama" CONSTRAINT "discussion_ama_created_by_fkey" FOREIGN KEY (created_by) REFERENCES users(id)
+    TABLE "discussion_members" CONSTRAINT "discussion_members_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
+    TABLE "discussion_pool" CONSTRAINT "discussion_pool_created_by_fkey" FOREIGN KEY (created_by) REFERENCES users(id)
+    TABLE "discussion_staff" CONSTRAINT "discussion_staff_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
+    TABLE "event_assistant" CONSTRAINT "event_assistant_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
+    TABLE "event" CONSTRAINT "event_organizer_fkey" FOREIGN KEY (organizer) REFERENCES users(id)
+    TABLE "low_discussion_members" CONSTRAINT "low_discussion_members_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
+    TABLE "low_discussion_staff" CONSTRAINT "low_discussion_staff_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
+    TABLE "pool" CONSTRAINT "pool_created_by_fkey" FOREIGN KEY (created_by) REFERENCES users(id)
+    TABLE "pool_react" CONSTRAINT "pool_react_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
+    TABLE "post" CONSTRAINT "post_created_by_fkey" FOREIGN KEY (created_by) REFERENCES users(id)
+    TABLE "post_interaction" CONSTRAINT "post_interaction_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
+    TABLE "regular_event" CONSTRAINT "regular_event_organizer_fkey" FOREIGN KEY (organizer) REFERENCES users(id)
+    TABLE "regular_event_rsvp" CONSTRAINT "regular_event_rsvp_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
+    TABLE "team_members" CONSTRAINT "team_members_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
+    TABLE "tournament_event" CONSTRAINT "tournament_event_organizer_fkey" FOREIGN KEY (organizer) REFERENCES users(id)
+    TABLE "tournament_event_rsvp" CONSTRAINT "tournament_event_rsvp_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
+    TABLE "user_achievements" CONSTRAINT "user_achievements_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
+    TABLE "user_relationship" CONSTRAINT "user_relationship_followed_fkey" FOREIGN KEY (followed) REFERENCES users(id)
+    TABLE "user_relationship" CONSTRAINT "user_relationship_follower_fkey" FOREIGN KEY (follower) REFERENCES users(id)
+    TABLE "user_state" CONSTRAINT "user_state_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
+    TABLE "user_tags_post" CONSTRAINT "user_tags_post_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
+    TABLE "wallet" CONSTRAINT "wallet_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
+

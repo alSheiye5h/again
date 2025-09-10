@@ -3,9 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
-
+#[serde(deny_unknown_fields)] // Remove this line to allow extra fields
 pub struct User {
-    pub id: i32,
     pub username: String,
     pub name: String,
     pub email: String,

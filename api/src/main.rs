@@ -1,19 +1,21 @@
-use actix_web::{App, HttpServer};
+use actix_web::{App, HttpServer, web};
 mod handlers;
-mod routes; // import the routes folder
-use database::connect_to_db; // <- now it works
-
+mod routes;
+use database::connect_to_db;
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
     let db_pool = connect_to_db::connect_db().await;
     println!("Database connected successfully");
 
-    HttpServer::new(|| {
+    let db_pool_data = web::Data::new(db_pool);
+
+    HttpServer::new(move || {
         App::new()
-            .configure(routes::route::auth_routes) // use routes module for route registration
+            .app_data(db_pool_data.clone()) // <-- pass pool to handlers
+            .configure(routes::route::auth_routes)
     })
-    .bind(("127.0.0.1", 8080))? // bind server to localhost:8080
+    .bind(("127.0.0.1", 8080))?
     .run()
     .await
 }
