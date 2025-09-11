@@ -49,3 +49,11 @@ pub struct UserTagsPost {
     pub post_id: i32,
 }
 
+#[derive(Serialize, sqlx::FromRow)]
+pub struct DbUser {
+    pub id: i32,
+    pub username: String,
+    pub email: String,
+    pub password: String,
+}
+
