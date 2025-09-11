@@ -27,6 +27,11 @@ pub struct CreatePostPayload {
     pub created_by: i32,
     pub has_discussion: Option<bool>,
 }
+
+#[derive(Deserialize)]
+pub struct UpdatePostPayload {
+    pub content: String,
+}
 #[derive(Debug, Serialize, Deserialize)]
 
 pub struct PostInteraction {
