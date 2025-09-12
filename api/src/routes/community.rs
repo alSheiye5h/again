@@ -11,8 +11,9 @@ use crate::handlers::community::{
         update_member as update_community_member,
     },
     staff::{
-        delete_staff as delete_community_staff, get_staff as get_community_staff,
-        list_staff as list_community_staff, update_staff as update_community_staff,
+        add_staff as add_community_staff, delete_staff as delete_community_staff,
+        get_staff as get_community_staff, list_staff as list_community_staff,
+        update_staff as update_community_staff,
     },
     update_community::update_community as update_top_level_community,
 };
@@ -30,6 +31,7 @@ pub fn community_routes(cfg: &mut web::ServiceConfig) {
             .route("/{community_id}/members/{user_id}", web::get().to(get_community_member))
             .route("/{community_id}/members/{user_id}", web::put().to(update_community_member))
             .route("/{community_id}/members/{user_id}", web::delete().to(delete_community_member))
+            .route("/{id}/staff", web::post().to(add_community_staff))
             .route("/{id}/staff", web::get().to(list_community_staff))
             .route("/{community_id}/staff/{user_id}", web::get().to(get_community_staff))
             .route("/{community_id}/staff/{user_id}", web::put().to(update_community_staff))

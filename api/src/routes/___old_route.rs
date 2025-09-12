@@ -40,7 +40,6 @@ use crate::handlers::community::staff::{delete_staff as delete_community_staff, 
 
 
 
-
 pub fn auth_routes(cfg: &mut web::ServiceConfig) {
     cfg.route("/register", web::post().to(register_user))
        .route("/login", web::post().to(login_user));
