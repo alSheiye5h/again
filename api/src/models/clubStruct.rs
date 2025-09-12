@@ -6,7 +6,7 @@ pub struct Club {
     pub name: String,
     pub profil_pic: String,
     pub cover_pic: String,
-    pub created_by: i32,
+    pub created_by: Option<i32>,
 }
 
 #[derive(Deserialize)]
@@ -14,7 +14,14 @@ pub struct CreateClubPayload {
     pub name: String,
     pub profil_pic: String,
     pub cover_pic: String,
-    pub created_by: i32,
+    pub created_by: Option<i32>,
+}
+
+#[derive(Deserialize)]
+pub struct UpdateClubPayload {
+    pub name: Option<String>,
+    pub profil_pic: Option<String>,
+    pub cover_pic: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
