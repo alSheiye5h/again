@@ -39,7 +39,6 @@ use crate::handlers::community::member::{add_member as add_community_member, del
 use crate::handlers::community::staff::{delete_staff as delete_community_staff, get_staff as get_community_staff, list_staff as list_community_staff, update_staff as update_community_staff};
 
 
-
 pub fn auth_routes(cfg: &mut web::ServiceConfig) {
     cfg.route("/register", web::post().to(register_user))
        .route("/login", web::post().to(login_user));
@@ -98,3 +97,4 @@ pub fn community_routes(cfg: &mut web::ServiceConfig) {
             .route("/{community_id}/staff/{user_id}", web::delete().to(delete_community_staff))
     );
 }
+
