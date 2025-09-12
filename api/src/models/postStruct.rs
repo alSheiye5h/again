@@ -7,9 +7,6 @@ pub struct Post {
     pub content: String,
     pub created_by: i32,
     pub has_discussion: bool,
-    // The discussion_id is now managed in the PostDiscussion join table.
-    // We can add it back here as an Option if we want to join and return it.
-    #[sqlx(default)] // This field will be populated by a JOIN query
     pub discussion_id: Option<i32>,
 }
 

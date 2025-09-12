@@ -15,11 +15,12 @@ pub async fn update_post(
             UPDATE post
             SET content = $1
             WHERE id = $2
-            RETURNING id, content, created_by, has_discussion 
+            RETURNING id, content, created_by, has_discussion
         )
         SELECT u.id, u.content, u.created_by, u.has_discussion, pd.discussion_id
         FROM updated u
         LEFT JOIN post_discussion pd ON u.id = pd.post_id
+
         "#,
     )
     .bind(&payload.content)

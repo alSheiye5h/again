@@ -1,6 +1,5 @@
 use actix_web::{web, HttpResponse, Responder};
-use api::models::{discussionStruct::Discussion, postStruct::{CreatePostPayload, Post}};
-use serde_json::json;
+use api::models::postStruct::{CreatePostPayload, Post};
 use sqlx::PgPool;
 
 /// Handler to create a new post.
@@ -27,7 +26,7 @@ pub async fn create_post(
     .bind(has_discussion)
     .fetch_one(&mut *tx)
     .await;
-
+    
     let mut post = match post_result {
         Ok(p) => p,
         Err(e) => {
@@ -36,17 +35,15 @@ pub async fn create_post(
             return HttpResponse::InternalServerError().json("Failed to create post");
         }
     };
-
+    
     // Step 2: If requested, create a discussion and link it to the post
     if has_discussion {
-        // Create the discussion, assuming the post creator is the admin
         let discussion_id_result = sqlx::query_scalar::<_, i32>(
             "INSERT INTO low_discussion DEFAULT VALUES RETURNING id",
         ).fetch_one(&mut *tx).await;
 
         match discussion_id_result {
             Ok(discussion_id) => {
-                // Link the post to the new discussion
                 if let Err(e) = sqlx::query("INSERT INTO post_discussion (post_id, discussion_id) VALUES ($1, $2)")
                     .bind(post.id)
                     .bind(discussion_id)
@@ -54,8 +51,7 @@ pub async fn create_post(
                     .await {
                         eprintln!("Failed to link post to discussion: {:?}", e);
                         return HttpResponse::InternalServerError().json("Failed to link discussion");
-                    };
-                // Update the post object to include the new discussion_id for the response
+                    }
                 post.discussion_id = Some(discussion_id);
             },
             Err(e) => { 
@@ -66,13 +62,11 @@ pub async fn create_post(
     }
 
     // Step 3: Commit the transaction
-    let result = tx.commit().await;
-
-    match result {
+    match tx.commit().await {
         Ok(_) => HttpResponse::Created().json(post),
         Err(e) => {
             eprintln!("Failed to commit transaction: {:?}", e);
             HttpResponse::InternalServerError().json("Failed to save post")
-        },
+        }
     }
 }

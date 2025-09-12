@@ -1,11 +1,20 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
 pub struct Club {
     pub id: i32,
     pub name: String,
     pub profil_pic: String,
     pub cover_pic: String,
+    pub created_by: i32,
+}
+
+#[derive(Deserialize)]
+pub struct CreateClubPayload {
+    pub name: String,
+    pub profil_pic: String,
+    pub cover_pic: String,
+    pub created_by: i32,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
