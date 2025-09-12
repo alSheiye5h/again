@@ -1,2 +1,4 @@
-pub mod route; // tell Rust about route.rs
-
+pub mod auth;
+pub mod club;
+pub mod community;
+pub mod post;

@@ -13,13 +13,13 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .app_data(db_pool_data.clone()) // <-- pass pool to handlers
-            .configure(routes::route::auth_routes)
+            .configure(routes::auth::auth_routes)
             .configure(|cfg| {
                 cfg.service(
                     web::scope("/api")
-                        .configure(routes::route::post_routes)
-                        .configure(routes::route::club_routes)
-                        .configure(routes::route::community_routes),
+                        .configure(routes::post::post_routes)
+                        .configure(routes::club::club_routes)
+                        .configure(routes::community::community_routes),
                 );
             })
     })
