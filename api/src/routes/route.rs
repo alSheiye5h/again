@@ -22,6 +22,11 @@ use crate::handlers::club::staff::add_club_staff::add_staff;
 use crate::handlers::club::staff::delete_club_staff::remove_staff as remove_staff_member;
 use crate::handlers::club::staff::get_club_staff::get_staff;
 use crate::handlers::club::staff::list_club_staff::list_staff;
+// Club Community management
+use crate::handlers::club::community::create_community::create_community;
+use crate::handlers::club::community::get_community::get_community;
+use crate::handlers::club::community::update_community::update_community;
+use crate::handlers::club::community::delete_community::delete_community;
 
 
 pub fn auth_routes(cfg: &mut web::ServiceConfig) {
@@ -51,4 +56,12 @@ pub fn club_routes(cfg: &mut web::ServiceConfig) {
        .route("/club/{id}/staff", web::get().to(list_staff))
        .route("/club/{club_id}/staff/{user_id}", web::get().to(get_staff))
        .route("/club/{club_id}/staff/{user_id}", web::delete().to(remove_staff_member));
+    // Community routes (singular, one-to-one with club)
+    cfg.service(
+        web::scope("/club/{club_id}/community")
+            .route("", web::post().to(create_community)) // POST creates or updates (upsert)
+            .route("", web::get().to(get_community))
+            .route("", web::put().to(update_community))
+            .route("", web::delete().to(delete_community)),
+    );
 }

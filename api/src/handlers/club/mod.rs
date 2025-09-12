@@ -5,4 +5,5 @@ pub mod list_clubs;
 pub mod update_club;
 pub mod member;
 pub mod staff;
+pub mod community;
 

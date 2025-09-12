@@ -115,17 +115,28 @@ pub struct ClubAma {
     pub club_id: i32,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
 pub struct ClubCommunity {
     pub id: i32,
-    pub created_by: i32,
     pub club_id: i32,
+    pub name: String,
+    pub description: String,
+    pub created_by: i32,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct ClubCommunityAma {
-    pub id: i32,
+/// Payload for creating a new community.
+#[derive(Deserialize)]
+pub struct CreateCommunityPayload {
+    pub name: String,
+    pub description: String,
     pub created_by: i32,
+}
+
+/// Payload for updating an existing community.
+#[derive(Deserialize)]
+pub struct UpdateCommunityPayload {
+    pub name: Option<String>,
+    pub description: Option<String>,
 }
 
 /// Payload for adding a member to a club.
