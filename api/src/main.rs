@@ -14,6 +14,13 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .app_data(db_pool_data.clone()) // <-- pass pool to handlers
             .configure(routes::route::auth_routes)
+            .configure(|cfg| {
+                cfg.service(
+                    web::scope("/api")
+                        .configure(routes::route::post_routes)
+                        .configure(routes::route::club_routes)
+                );
+            })
     })
     .bind(("127.0.0.1", 8080))?
     .run()

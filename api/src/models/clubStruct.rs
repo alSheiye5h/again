@@ -49,11 +49,28 @@ pub struct ClubDiscussion {
     pub club_id: i32,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+/// Represents a single row in the `club_members` table.
+#[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
 pub struct ClubMembers {
     pub id: i32,
     pub club_id: i32,
     pub user_id: i32,
+}
+
+/// Represents the detailed information for a club member, used for listing members.
+#[derive(Debug, Serialize, sqlx::FromRow)]
+pub struct ClubMemberInfo {
+    pub user_id: i32,
+    pub username: String,
+    pub email: String,
+}
+
+/// Represents the detailed information for a club staff member, used for listing staff.
+#[derive(Debug, Serialize, sqlx::FromRow)]
+pub struct ClubStaffInfo {
+    pub user_id: i32,
+    pub username: String,
+    pub promoted_by: i32,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -109,4 +126,17 @@ pub struct ClubCommunity {
 pub struct ClubCommunityAma {
     pub id: i32,
     pub created_by: i32,
+}
+
+/// Payload for adding a member to a club.
+#[derive(Deserialize)]
+pub struct ClubMemberPayload {
+    pub user_id: i32,
+}
+
+/// Payload for adding a staff member to a club.
+#[derive(Deserialize)]
+pub struct AddClubStaffPayload {
+    pub user_id: i32,
+    pub promoted_by: i32, // The ID of the user who is promoting the new staff member.
 }
