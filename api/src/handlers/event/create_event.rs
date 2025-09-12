@@ -8,6 +8,14 @@ pub async fn create_event(
     db_pool: web::Data<PgPool>,
     payload: web::Json<CreateEventPayload>,
 ) -> impl Responder {
+    // Validate that exactly one of club_host or community_host is provided.
+    if payload.club_host.is_some() == payload.community_host.is_some() {
+        return HttpResponse::BadRequest().json(json!({
+            "status": "error",
+            "message": "An event must have exactly one host: either a club_host or a community_host."
+        }));
+    }
+
     let mut tx = match db_pool.begin().await {
         Ok(tx) => tx,
         Err(e) => {
@@ -17,11 +25,11 @@ pub async fn create_event(
         }
     };
 
-    let result = sqlx::query_as::<_, Event>(
+    let event_result = sqlx::query_as::<_, Event>(
         r#"
         INSERT INTO event (club_host, community_host, organizer, has_discussion)
         VALUES ($1, $2, $3, $4)
-        RETURNING id, club_host, community_host, organizer, has_discussion
+        RETURNING id, club_host, community_host, organizer, has_discussion, NULL as discussion_id
         "#,
     )
     .bind(payload.club_host)
@@ -31,7 +39,7 @@ pub async fn create_event(
     .fetch_one(&mut *tx)
     .await;
 
-    let event = match result {
+    let mut event = match event_result {
         Ok(event) => event,
         Err(e) => {
             eprintln!("Failed to create event: {:?}", e);
@@ -40,7 +48,32 @@ pub async fn create_event(
         }
     };
 
-    // For now, we are not creating a discussion, just returning the event.
+    // If requested, create a discussion and link it to the event.
+    if event.has_discussion {
+        let discussion_id_result = sqlx::query_scalar::<_, i32>(
+            "INSERT INTO low_discussion DEFAULT VALUES RETURNING id",
+        )
+        .fetch_one(&mut *tx)
+        .await;
+
+        match discussion_id_result {
+            Ok(discussion_id) => {
+                if let Err(e) = sqlx::query("INSERT INTO event_discussion (event_id, discussion_id) VALUES ($1, $2)")
+                    .bind(event.id)
+                    .bind(discussion_id)
+                    .execute(&mut *tx)
+                    .await {
+                        eprintln!("Failed to link event to discussion: {:?}", e);
+                        return HttpResponse::InternalServerError().json("Failed to link discussion");
+                    }
+                event.discussion_id = Some(discussion_id);
+            },
+            Err(e) => {
+                eprintln!("Failed to create discussion: {:?}", e);
+                return HttpResponse::InternalServerError().json("Failed to create discussion");
+            }
+        }
+    }
 
     match tx.commit().await {
         Ok(_) => HttpResponse::Created().json(event),

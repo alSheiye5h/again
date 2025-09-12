@@ -3,21 +3,22 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
 pub struct Event {
     pub id: i32,
-    pub club_host: i32,
-    pub community_host: i32,
+    pub club_host: Option<i32>,
+    pub community_host: Option<i32>,
     pub organizer: i32,
     pub has_discussion: bool,
+    pub discussion_id: Option<i32>,
 }
 
 #[derive(Deserialize)]
 pub struct CreateEventPayload {
-    pub club_host: i32,
-    pub community_host: i32,
+    pub club_host: Option<i32>,
+    pub community_host: Option<i32>,
     pub organizer: i32,
     pub has_discussion: bool,
 }
 
-#[derive(Deserialize)]
+#[derive(Debug, Deserialize)]
 pub struct UpdateEventPayload {
     pub club_host: Option<i32>,
     pub community_host: Option<i32>,
