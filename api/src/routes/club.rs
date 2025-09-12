@@ -5,6 +5,7 @@ use crate::handlers::club::{
         create_community::create_community, delete_community::delete_community,
         get_community::get_community, update_community::update_community,
     },
+    content::club_post::create_club_post,
     create_club::create_club,
     delete_club::delete_club,
     get_club::get_club_by_id,
@@ -21,25 +22,41 @@ use crate::handlers::club::{
 };
 
 pub fn club_routes(cfg: &mut web::ServiceConfig) {
-    cfg.route("/club", web::post().to(create_club))
-       .route("/club", web::get().to(list_clubs))
-       .route("/club/{id}", web::get().to(get_club_by_id))
-       .route("/club/{id}", web::put().to(update_club))
-       .route("/club/{id}", web::delete().to(delete_club))
-       .route("/club/{id}/members", web::post().to(add_member))
-       .route("/club/{id}/members", web::get().to(list_members))
-       .route("/club/{club_id}/members/{user_id}", web::get().to(get_member))
-       .route("/club/{club_id}/members/{user_id}", web::delete().to(remove_member))
-       .route("/club/{id}/staff", web::post().to(add_staff))
-       .route("/club/{id}/staff", web::get().to(list_staff))
-       .route("/club/{club_id}/staff/{user_id}", web::get().to(get_staff))
-       .route("/club/{club_id}/staff/{user_id}", web::delete().to(remove_staff_member));
-    // Community routes (singular, one-to-one with club)
     cfg.service(
-        web::scope("/club/{club_id}/community")
-            .route("", web::post().to(create_community)) // POST creates or updates (upsert)
-            .route("", web::get().to(get_community))
-            .route("", web::put().to(update_community))
-            .route("", web::delete().to(delete_community)),
+        web::scope("/club")
+            .route("", web::post().to(create_club))
+            .route("", web::get().to(list_clubs))
+            .service(
+                web::scope("/{club_id}")
+                    .route("", web::get().to(get_club_by_id))
+                    .route("", web::put().to(update_club))
+                    .route("", web::delete().to(delete_club))
+                    // Club Posts
+                    .route("/posts", web::post().to(create_club_post))
+                    // Club Members
+                    .service(
+                        web::scope("/members")
+                            .route("", web::post().to(add_member))
+                            .route("", web::get().to(list_members))
+                            .route("/{user_id}", web::get().to(get_member))
+                            .route("/{user_id}", web::delete().to(remove_member)),
+                    )
+                    // Club Staff
+                    .service(
+                        web::scope("/staff")
+                            .route("", web::post().to(add_staff))
+                            .route("", web::get().to(list_staff))
+                            .route("/{user_id}", web::get().to(get_staff))
+                            .route("/{user_id}", web::delete().to(remove_staff_member)),
+                    )
+                    // Community routes (singular, one-to-one with club)
+                    .service(
+                        web::scope("/community")
+                            .route("", web::post().to(create_community)) // POST creates or updates (upsert)
+                            .route("", web::get().to(get_community))
+                            .route("", web::put().to(update_community))
+                            .route("", web::delete().to(delete_community)),
+                    ),
+            ),
     );
 }

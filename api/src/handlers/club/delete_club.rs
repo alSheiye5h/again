@@ -5,9 +5,9 @@ use serde_json::json;
 /// Handler to delete a club by its ID.
 pub async fn delete_club(
     db_pool: web::Data<PgPool>,
-    path: web::Path<i32>,
+    path: web::Path<i32>, // This will be the club_id from the path
 ) -> impl Responder {
-    let club_id = path.into_inner();
+    let club_id = path.into_inner(); // e.g., /club/123 -> club_id is 123
 
     // Start a transaction to ensure atomicity.
     let mut tx = match db_pool.begin().await {

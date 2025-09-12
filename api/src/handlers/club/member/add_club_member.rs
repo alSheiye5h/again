@@ -6,10 +6,10 @@ use sqlx::PgPool;
 /// Handler to add a user as a member to a club.
 pub async fn add_member(
     db_pool: web::Data<PgPool>,
-    path: web::Path<i32>,
+    path: web::Path<i32>, // This will be the club_id from the path
     payload: web::Json<ClubMemberPayload>,
 ) -> impl Responder {
-    let club_id = path.into_inner();
+    let club_id = path.into_inner(); // e.g., /club/123/members -> club_id is 123
     let user_id = payload.user_id;
 
     // Using ON CONFLICT DO NOTHING is a robust way to handle cases where the user is already a member.
