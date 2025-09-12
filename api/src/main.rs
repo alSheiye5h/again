@@ -19,6 +19,7 @@ async fn main() -> std::io::Result<()> {
                     web::scope("/api")
                         .configure(routes::route::post_routes)
                         .configure(routes::route::club_routes)
+                        .configure(routes::route::community_routes),
                 );
             })
     })

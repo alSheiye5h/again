@@ -27,6 +27,12 @@ use crate::handlers::club::community::create_community::create_community;
 use crate::handlers::club::community::get_community::get_community;
 use crate::handlers::club::community::update_community::update_community;
 use crate::handlers::club::community::delete_community::delete_community;
+// Top-level Community management
+use crate::handlers::community::create_community::create_community as create_top_level_community;
+use crate::handlers::community::delete_community::delete_community as delete_top_level_community;
+use crate::handlers::community::get_community::get_community as get_top_level_community;
+use crate::handlers::community::list_communities::list_communities as list_top_level_communities;
+use crate::handlers::community::update_community::update_community as update_top_level_community;
 
 
 pub fn auth_routes(cfg: &mut web::ServiceConfig) {
@@ -63,5 +69,16 @@ pub fn club_routes(cfg: &mut web::ServiceConfig) {
             .route("", web::get().to(get_community))
             .route("", web::put().to(update_community))
             .route("", web::delete().to(delete_community)),
+    );
+}
+
+pub fn community_routes(cfg: &mut web::ServiceConfig) {
+    cfg.service(
+        web::scope("/community")
+            .route("", web::post().to(create_top_level_community))
+            .route("", web::get().to(list_top_level_communities))
+            .route("/{id}", web::get().to(get_top_level_community))
+            .route("/{id}", web::put().to(update_top_level_community))
+            .route("/{id}", web::delete().to(delete_top_level_community)),
     );
 }

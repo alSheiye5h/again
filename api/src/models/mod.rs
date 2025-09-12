@@ -9,4 +9,3 @@ pub mod communitieStruct;
 pub mod ama_poolStruct;
 pub mod rsvpStruct;
 pub mod tournamentStruct;
-
