@@ -1,5 +1,6 @@
 use actix_web::{App, HttpServer, web};
 mod handlers;
+mod models;
 mod routes;
 use database::connect_to_db;
 
@@ -19,7 +20,8 @@ async fn main() -> std::io::Result<()> {
                     web::scope("/api")
                         .configure(routes::post::post_routes)
                         .configure(routes::club::club_routes)
-                        .configure(routes::community::community_routes),
+                        .configure(routes::community::community_routes)
+                        .configure(routes::announcement::announcement_routes),
                 );
             })
     })
