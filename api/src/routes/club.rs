@@ -5,7 +5,7 @@ use crate::handlers::club::{
         create_community::create_community, delete_community::delete_community,
         get_community::get_community, update_community::update_community,
     },
-    content::club_post::create_club_post,
+    content::{create_club_post::create_club_post, list_club_posts::list_club_posts},
     create_club::create_club,
     delete_club::delete_club,
     get_club::get_club_by_id,
@@ -33,6 +33,7 @@ pub fn club_routes(cfg: &mut web::ServiceConfig) {
                     .route("", web::delete().to(delete_club))
                     // Club Posts
                     .route("/posts", web::post().to(create_club_post))
+                    .route("/posts", web::get().to(list_club_posts))
                     // Club Members
                     .service(
                         web::scope("/members")
