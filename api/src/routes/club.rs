@@ -4,7 +4,10 @@ use crate::handlers::club::{
     community::{
         create_community::create_community, delete_community::delete_community,
         get_community::get_community, update_community::update_community,
-    }, content::{create_club_post::create_club_post, list_club_posts::list_club_posts}, create_club::create_club, delete_club::delete_club,
+    },
+    content::{create_club_post::create_club_post, list_club_posts::list_club_posts},
+    create_club::create_club,
+    delete_club::delete_club,
     get_club::get_club_by_id,
     list_clubs::list_clubs,
     member::{
