@@ -3,7 +3,7 @@ use serde_json::json;
 use sqlx::PgPool;
 
 /// Handler to remove a staff member from a community.
-pub async fn delete_staff(
+pub async fn delete_community_staff(
     db_pool: web::Data<PgPool>,
     path: web::Path<(i32, i32)>,
 ) -> impl Responder {

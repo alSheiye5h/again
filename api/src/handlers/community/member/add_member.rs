@@ -4,7 +4,7 @@ use serde_json::json;
 use sqlx::PgPool;
 
 /// Handler to add a user as a member to a community.
-pub async fn add_member(
+pub async fn add_community_member(
     db_pool: web::Data<PgPool>,
     path: web::Path<i32>,
     payload: web::Json<AddMemberPayload>,

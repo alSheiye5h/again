@@ -5,7 +5,7 @@ use sqlx::PgPool;
 
 /// Handler to add a user as staff or promote an existing member to staff.
 /// This uses an "upsert" operation.
-pub async fn add_staff(
+pub async fn add_community_staff(
     db_pool: web::Data<PgPool>,
     path: web::Path<i32>,
     payload: web::Json<AddMemberPayload>,

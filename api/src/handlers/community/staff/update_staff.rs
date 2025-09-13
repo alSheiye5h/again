@@ -4,7 +4,7 @@ use serde_json::json;
 use sqlx::PgPool;
 
 /// Handler to update a community staff member's role.
-pub async fn update_staff(
+pub async fn update_community_staff(
     db_pool: web::Data<PgPool>,
     path: web::Path<(i32, i32)>,
     payload: web::Json<UpdateMemberPayload>,

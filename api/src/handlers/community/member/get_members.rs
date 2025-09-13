@@ -4,7 +4,7 @@ use serde_json::json;
 use sqlx::PgPool;
 
 /// Handler to list all members of a specific community.
-pub async fn get_members(
+pub async fn list_community_members(
     db_pool: web::Data<PgPool>,
     path: web::Path<i32>,
 ) -> impl Responder {

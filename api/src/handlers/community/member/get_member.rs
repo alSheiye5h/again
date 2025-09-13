@@ -4,7 +4,7 @@ use serde_json::json;
 use sqlx::PgPool;
 
 /// Handler to get a single member from a community.
-pub async fn get_member(
+pub async fn get_community_member(
     db_pool: web::Data<PgPool>,
     path: web::Path<(i32, i32)>,
 ) -> impl Responder {

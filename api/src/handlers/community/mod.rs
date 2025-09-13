@@ -1,3 +1,4 @@
+pub mod content;
 pub mod create_community;
 pub mod delete_community;
 pub mod get_community;

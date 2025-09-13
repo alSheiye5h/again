@@ -4,7 +4,7 @@ use serde_json::json;
 use sqlx::PgPool;
 
 /// Handler to list all staff members (Staff, Admin) of a specific community.
-pub async fn list_staff(
+pub async fn list_community_staff(
     db_pool: web::Data<PgPool>,
     path: web::Path<i32>,
 ) -> impl Responder {
