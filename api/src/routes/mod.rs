@@ -4,3 +4,4 @@ pub mod club;
 pub mod community;
 pub mod post;
 pub mod event;
+pub mod user;

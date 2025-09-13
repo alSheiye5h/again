@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use sqlx::FromRow; // Make sure this is imported
 
 #[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
 pub struct Club {
@@ -73,7 +74,7 @@ pub struct ClubStaffInfo {
     pub promoted_by: i32,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
 pub struct ClubPool {
     pub id: i32,
     pub created_by: i32,
@@ -108,7 +109,7 @@ pub struct ClubAchievements {
     pub club_id: i32,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
 pub struct ClubAma {
     pub id: i32,
     pub created_by: i32,

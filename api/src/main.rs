@@ -23,6 +23,7 @@ async fn main() -> std::io::Result<()> {
                         .configure(routes::community::community_routes)
                         .configure(routes::announcement::announcement_routes)
                         .configure(routes::event::event_routes)
+                        .configure(routes::user::user_routes)
                 );
             })
     })

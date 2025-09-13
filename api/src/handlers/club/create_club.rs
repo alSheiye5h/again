@@ -36,7 +36,24 @@ pub async fn create_club(
         }
     };
 
-    // Step 2: Add the creator as the first staff member.
+    // Step 2: Create a default community for the new club.
+    let community_name = format!("{} Community", &club.name);
+    let community_description = format!("The official community for the {} club.", &club.name);
+    if let Err(e) = sqlx::query(
+        "INSERT INTO club_community (club_id, name, description, created_by) VALUES ($1, $2, $3, $4)",
+    )
+    .bind(club.id)
+    .bind(&community_name)
+    .bind(&community_description)
+    .bind(payload.created_by)
+    .execute(&mut *tx)
+    .await
+    {
+        eprintln!("Failed to create default community for club: {:?}", e);
+        return HttpResponse::InternalServerError().json("Failed to create default community for club.");
+    }
+
+    // Step 3: Add the creator as the first staff member.
     if let Err(e) = sqlx::query(
         "INSERT INTO club_staff (user_id, club_id, promoted_by) VALUES ($1, $2, $3)",
     )
@@ -50,7 +67,7 @@ pub async fn create_club(
         return HttpResponse::InternalServerError().json("Failed to set club creator as staff.");
     }
 
-    // Step 3: Commit the transaction and return the new club.
+    // Step 4: Commit the transaction and return the new club.
     match tx.commit().await {
         Ok(_) => HttpResponse::Created().json(club),
         Err(e) => {
