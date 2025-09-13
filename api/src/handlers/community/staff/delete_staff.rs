@@ -9,17 +9,18 @@ pub async fn delete_community_staff(
 ) -> impl Responder {
     let (community_id, user_id) = path.into_inner();
 
-    let result = sqlx::query(
-        "DELETE FROM community_members WHERE community_id = $1 AND user_id = $2 AND role IN ('staff', 'admin')",
-    )
-    .bind(community_id)
-    .bind(user_id)
-    .execute(&**db_pool)
-    .await;
+    let result = sqlx::query("DELETE FROM community_staff WHERE community_id = $1 AND user_id = $2")
+        .bind(community_id)
+        .bind(user_id)
+        .execute(&**db_pool)
+        .await;
 
     match result {
-        Ok(res) if res.rows_affected() > 0 => HttpResponse::NoContent().finish(),
-        Ok(_) => HttpResponse::NotFound().json(json!({"status": "error", "message": "Staff member not found."})),
+        Ok(res) if res.rows_affected() > 0 => {
+            HttpResponse::Ok().json(json!({"status": "success", "message": "Staff member removed successfully."}))
+        }
+        Ok(_) => HttpResponse::NotFound()
+            .json(json!({"status": "error", "message": "Staff member not found in this community."})),
         Err(e) => {
             eprintln!("Failed to delete community staff member: {:?}", e);
             HttpResponse::InternalServerError().json(json!({"status": "error", "message": "Failed to delete staff member."}))

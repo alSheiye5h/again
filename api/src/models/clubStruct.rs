@@ -152,3 +152,9 @@ pub struct AddClubStaffPayload {
     pub user_id: i32,
     pub promoted_by: i32, // The ID of the user who is promoting the new staff member.
 }
+
+/// Payload for creating a new pool in a club's community.
+#[derive(Deserialize)]
+pub struct CreateCommunityPoolPayload {
+    pub created_by: i32,
+}

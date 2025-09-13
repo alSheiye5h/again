@@ -68,3 +68,22 @@ pub struct AddMemberPayload {
 pub struct UpdateMemberPayload {
     pub role: MemberRole,
 }
+
+/// Represents the detailed information for a community staff member.
+#[derive(Debug, Serialize, sqlx::FromRow)]
+pub struct CommunityStaffInfo {
+    pub user_id: i32,
+    pub username: String,
+    pub promoted_by: i32,
+}
+
+#[derive(Deserialize)]
+pub struct AddCommunityStaffPayload {
+    pub user_id: i32,
+    pub promoted_by: i32,
+}
+
+#[derive(Deserialize)]
+pub struct UpdateCommunityStaffPayload {
+    pub promoted_by: i32,
+}

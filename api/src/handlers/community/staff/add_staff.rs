@@ -1,38 +1,37 @@
 use actix_web::{web, HttpResponse, Responder};
-use api::models::communitieStruct::{AddMemberPayload, CommunityMember, MemberRole};
 use serde_json::json;
 use sqlx::PgPool;
+use api::models::communitieStruct::AddCommunityStaffPayload;
 
-/// Handler to add a user as staff or promote an existing member to staff.
-/// This uses an "upsert" operation.
+/// Handler to add a user as staff to a community.
 pub async fn add_community_staff(
     db_pool: web::Data<PgPool>,
     path: web::Path<i32>,
-    payload: web::Json<AddMemberPayload>,
+    payload: web::Json<AddCommunityStaffPayload>,
 ) -> impl Responder {
     let community_id = path.into_inner();
-    let user_id = payload.user_id;
 
-    let result = sqlx::query_as::<_, CommunityMember>(
-        r#"
-        INSERT INTO community_members (community_id, user_id, role)
-        VALUES ($1, $2, $3)
-        ON CONFLICT (community_id, user_id)
-        DO UPDATE SET role = EXCLUDED.role
-        RETURNING *
-        "#,
+    // Using ON CONFLICT DO NOTHING to prevent errors if the user is already staff.
+    let result = sqlx::query(
+        "INSERT INTO community_staff (user_id, community_id, promoted_by) VALUES ($1, $2, $3) ON CONFLICT (user_id, community_id) DO NOTHING",
     )
+    .bind(payload.user_id)
     .bind(community_id)
-    .bind(user_id)
-    .bind(MemberRole::Staff) // Add or update to 'staff'
-    .fetch_one(&**db_pool)
+    .bind(payload.promoted_by)
+    .execute(&**db_pool)
     .await;
 
     match result {
-        Ok(staff_member) => HttpResponse::Ok().json(staff_member),
+        Ok(res) => {
+            if res.rows_affected() == 0 {
+                HttpResponse::Ok().json(json!({"status": "success", "message": "User is already a staff member in this community."}))
+            } else {
+                HttpResponse::Created().json(json!({"status": "success", "message": "User promoted to staff successfully."}))
+            }
+        }
         Err(e) => {
-            eprintln!("Failed to add or promote community staff: {:?}", e);
-            HttpResponse::InternalServerError().json(json!({"status": "error", "message": "Failed to add or promote staff."}))
+            eprintln!("Failed to add community staff: {:?}", e);
+            HttpResponse::InternalServerError().json(json!({"status": "error", "message": "Failed to add staff."}))
         }
     }
 }

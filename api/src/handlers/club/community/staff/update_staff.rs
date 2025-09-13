@@ -3,28 +3,35 @@ use api::models::communitieStruct::{CommunityMember, MemberRole, UpdateMemberPay
 use serde_json::json;
 use sqlx::PgPool;
 
-/// Handler to update a community staff member's role.
+/// Handler to update a club community staff member's `promoted_by` field.
 pub async fn update_community_staff(
     db_pool: web::Data<PgPool>,
-    path: web::Path<(i32, i32)>,
-    payload: web::Json<UpdateMemberPayload>,
+    path: web::Path<(i32, i32)>, // (club_id, user_id)
+    payload: web::Json<UpdateClubCommunityStaffPayload>,
 ) -> impl Responder {
-    let (community_id, user_id) = path.into_inner();
+    let (club_id, user_id) = path.into_inner();
 
-    let result = sqlx::query_as::<_, CommunityMember>(
-        "UPDATE community_members SET role = $1 WHERE community_id = $2 AND user_id = $3 AND role IN ($4, $5) RETURNING *",
-    )
-    .bind(payload.role)
-    .bind(community_id)
-    .bind(user_id)
-    .bind(MemberRole::Staff)
-    .bind(MemberRole::Admin)
-    .fetch_optional(&**db_pool)
-    .await;
+    let query = r#"
+        UPDATE club_community_staff ccs
+        SET promoted_by = $1
+        FROM club_community cc
+        WHERE ccs.club_community_id = cc.id
+          AND cc.club_id = $2
+          AND ccs.user_id = $3
+        RETURNING (SELECT username FROM users WHERE id = $3), ccs.user_id, ccs.promoted_by
+    "#;
 
-    match result {
-        Ok(Some(updated_member)) => HttpResponse::Ok().json(updated_member),
-        Ok(None) => HttpResponse::NotFound().json(json!({"status": "error", "message": "Staff member not found."})),
+    match sqlx::query_as::<_, ClubCommunityStaffInfo>(query)
+        .bind(payload.promoted_by)
+        .bind(club_id)
+        .bind(user_id)
+        .fetch_one(&**db_pool)
+        .await
+    {
+        Ok(updated_member) => HttpResponse::Ok().json(updated_member),
+        Err(sqlx::Error::RowNotFound) => {
+            HttpResponse::NotFound().json(json!({"status": "error", "message": "Staff member not found."}))
+        }
         Err(e) => {
             eprintln!("Failed to update community staff member: {:?}", e);
             HttpResponse::InternalServerError().json(json!({"status": "error", "message": "Failed to update staff member."}))
