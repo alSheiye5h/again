@@ -158,3 +158,13 @@ pub struct AddClubStaffPayload {
 pub struct CreateCommunityPoolPayload {
     pub created_by: i32,
 }
+
+/// Represents a member in the `club_community_members` join table.
+#[derive(Debug, Serialize, sqlx::FromRow)]
+pub struct ClubCommunityMember {
+    pub id: i32,
+    pub user_id: i32,
+    pub club_community_id: i32,
+    pub role: String, // Assuming role is a string, adjust if it's an enum
+    pub joined_at: chrono::NaiveDateTime,
+}

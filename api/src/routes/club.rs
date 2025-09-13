@@ -18,7 +18,20 @@ use crate::handlers::club::{
         content::pool::{create_club_community_pool, list_club_community_pools},
         content::ama::{create_club_community_ama, list_club_community_amas},
         content::post::{create_club_community_post, list_club_community_posts},
-
+        member::{
+            add_community_member as add_club_community_member,
+            delete_community_member as delete_club_community_member,
+            get_community_member as get_club_community_member,
+            list_members::list_community_members as list_club_community_members,
+            update_member::update_community_member as update_club_community_member,
+        },
+        staff::{
+            add_community_staff as add_club_community_staff,
+            delete_community_staff as delete_club_community_staff,
+            get_community_staff as get_club_community_staff,
+            list_staff::list_community_staff as list_club_community_staff,
+            update_staff::update_community_staff as update_club_community_staff,
+        },
     },
     create_club::create_club,
     delete_club::delete_club,
@@ -85,8 +98,21 @@ pub fn club_routes(cfg: &mut web::ServiceConfig) {
                                         .route("/ama", web::get().to(list_club_community_amas))
                                         .route("/pool", web::post().to(create_club_community_pool))
                                         .route("/pool", web::get().to(list_club_community_pools))
-                                )
-                                ,
+                                ),
+                                // Club Community Members
+                                web::scope("/members")
+                                    .route("", web::post().to(add_club_community_member))
+                                    .route("", web::get().to(list_club_community_members))
+                                    .route("/{user_id}", web::get().to(get_club_community_member))
+                                    .route("/{user_id}", web::put().to(update_club_community_member))
+                                    .route("/{user_id}", web::delete().to(delete_club_community_member)),
+                                // Club Community Staff
+                                web::scope("/staff")
+                                    .route("", web::post().to(add_club_community_staff))
+                                    .route("", web::get().to(list_club_community_staff))
+                                    .route("/{user_id}", web::get().to(get_club_community_staff))
+                                    .route("/{user_id}", web::put().to(update_club_community_staff))
+                                    .route("/{user_id}", web::delete().to(delete_club_community_staff)),
                     )
                         ,
             ),
