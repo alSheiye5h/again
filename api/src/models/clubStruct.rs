@@ -168,3 +168,24 @@ pub struct ClubCommunityMember {
     pub role: String, // Assuming role is a string, adjust if it's an enum
     pub joined_at: chrono::NaiveDateTime,
 }
+
+/// Payload for updating a staff member in a club's community.
+#[derive(Deserialize)]
+pub struct UpdateClubCommunityStaffPayload {
+    pub promoted_by: i32,
+}
+
+/// Represents the detailed information for a club community staff member.
+#[derive(Debug, Serialize, sqlx::FromRow)]
+pub struct ClubCommunityStaffInfo {
+    pub user_id: i32,
+    pub username: String,
+    pub promoted_by: i32,
+}
+
+/// Payload for adding a staff member to a club's community.
+#[derive(Deserialize)]
+pub struct AddClubCommunityStaffPayload {
+    pub user_id: i32,
+    pub promoted_by: i32,
+}

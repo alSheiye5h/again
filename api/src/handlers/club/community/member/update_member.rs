@@ -23,7 +23,7 @@ pub async fn update_community_member(
     "#;
 
     let result = sqlx::query_as::<_, ClubCommunityMember>(query)
-        .bind(payload.role.to_string().to_lowercase()) // Assuming role is a string like 'member', 'staff'
+        .bind(payload.role) // Directly bind the enum; sqlx handles the type mapping
         .bind(club_id)
         .bind(user_id)
         .fetch_optional(&**db_pool)

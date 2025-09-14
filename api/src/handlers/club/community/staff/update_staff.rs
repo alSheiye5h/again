@@ -1,5 +1,5 @@
 use actix_web::{web, HttpResponse, Responder};
-use api::models::communitieStruct::{CommunityMember, MemberRole, UpdateMemberPayload};
+use api::models::clubStruct::{ClubCommunityStaffInfo, UpdateClubCommunityStaffPayload};
 use serde_json::json;
 use sqlx::PgPool;
 
@@ -18,7 +18,7 @@ pub async fn update_community_staff(
         WHERE ccs.club_community_id = cc.id
           AND cc.club_id = $2
           AND ccs.user_id = $3
-        RETURNING (SELECT username FROM users WHERE id = $3), ccs.user_id, ccs.promoted_by
+    RETURNING ccs.user_id, (SELECT username FROM users WHERE id = ccs.user_id) as username, ccs.promoted_by
     "#;
 
     match sqlx::query_as::<_, ClubCommunityStaffInfo>(query)
