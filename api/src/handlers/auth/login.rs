@@ -3,9 +3,9 @@ use actix_web::cookie::Cookie;
 use sqlx::PgPool;
 use bcrypt::verify;
 use api::jwt::create_jwt::create_jwt;
-use crate::models::userStruct::UserLogin;
-use crate::models::userStruct::DbUser;
-use api::models::jwtStruct::Keys;
+use crate::models::User_struct::UserLogin;
+use crate::models::User_struct::DbUser;
+use api::models::Jwt_struct::Keys;
 
 
 pub async fn login_user(

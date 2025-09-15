@@ -1,5 +1,5 @@
 use actix_web::{web, HttpResponse, Responder};
-use api::models::postStruct::{CreatePostPayload, Post};
+use api::models::Post_struct::{CreatePostPayload, Post};
 use sqlx::PgPool;
 
 /// Handler to create a new post.

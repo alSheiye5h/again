@@ -1,4 +1,4 @@
-use crate::models::jwtStruct::{Claims, Keys};
+use crate::models::Jwt_struct::{Claims, Keys};
 use jsonwebtoken::{encode, Header};
 
 pub fn create_jwt(user_id: &str, keys: &Keys) -> Result<String, jsonwebtoken::errors::Error> {

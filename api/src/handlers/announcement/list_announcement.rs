@@ -1,4 +1,6 @@
-use crate::models::announcementStruct::AnnouncementStruct;
+use crate::models::
+Announcement_struct::
+Announcement_struct;
 use actix_web::{web, HttpResponse, Responder};
 use serde::Deserialize;
 use sqlx::PgPool;
@@ -19,7 +21,8 @@ pub async fn list_announcements(
     let offset = (page - 1) * per_page;
 
     match sqlx::query_as!(
-        AnnouncementStruct,
+        
+Announcement_struct,
         r#"
         SELECT id, title, content, club_id, community_id, created_by, created_at, updated_at
         FROM announcements

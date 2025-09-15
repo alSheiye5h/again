@@ -2,7 +2,8 @@ use serde::{Deserialize, Serialize};
 use chrono::{DateTime, Utc};
 
 #[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
-pub struct AnnouncementStruct {
+pub struct 
+Announcement_struct {
     pub id: i32,
     pub title: String,
     pub content: String,
@@ -14,7 +15,8 @@ pub struct AnnouncementStruct {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct AnnouncementCreatePayload {
+pub struct 
+Announcement_create_payload {
     pub title: String,
     pub content: String,
     pub club_id: Option<i32>,
@@ -23,7 +25,8 @@ pub struct AnnouncementCreatePayload {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct AnnouncementUpdatePayload {
+pub struct 
+Announcement_update_payload {
     pub title: Option<String>,
     pub content: Option<String>,
     pub club_id: Option<i32>,

@@ -1,4 +1,4 @@
-use crate::models::postStruct::{CreatePostPayload, Post};
+use crate::models::Post_struct::{CreatePostPayload, Post};
 use actix_web::{web, HttpResponse, Responder};
 use serde_json::json;
 use sqlx::PgPool;

@@ -1,14 +1,19 @@
-use crate::models::announcementStruct::{AnnouncementCreatePayload, AnnouncementStruct};
+use crate::models::
+Announcement_struct::{
+Announcement_create_payload, 
+Announcement_struct};
 use actix_web::{web, HttpResponse, Responder};
 use sqlx::PgPool;
 
 /// Create a new announcement.
 pub async fn create_announcement(
     pool: web::Data<PgPool>,
-    payload: web::Json<AnnouncementCreatePayload>,
+    payload: web::Json<
+Announcement_create_payload>,
 ) -> impl Responder {
     match sqlx::query_as!(
-        AnnouncementStruct,
+        
+Announcement_struct,
         r#"
         INSERT INTO announcements (title, content, club_id, community_id, created_by)
         VALUES ($1, $2, $3, $4, $5)

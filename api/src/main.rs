@@ -6,7 +6,7 @@ mod handlers;
 mod models;
 mod routes;
 use database::connect_to_db;
-use api::models::jwtStruct::Keys;
+use api::models::Jwt_struct::Keys;
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {

@@ -1,5 +1,5 @@
 use actix_web::{web, HttpResponse, Responder};
-use api::models::communitieStruct::Community;
+use api::models::Communitie_struct::Community;
 use serde_json::json;
 use sqlx::PgPool;
 

@@ -1,5 +1,5 @@
 use actix_web::{web, HttpResponse, Responder};
-use api::models::clubStruct::{Club, UpdateClubPayload};
+use api::models::Club_struct::{Club, UpdateClubPayload};
 use sqlx::PgPool;
 
 /// Handler to update a club's details.

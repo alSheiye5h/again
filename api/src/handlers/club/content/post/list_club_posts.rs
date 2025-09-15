@@ -1,5 +1,5 @@
 use actix_web::{web, HttpResponse, Responder};
-use crate::models::postStruct::Post;
+use crate::models::Post_struct::Post;
 use serde_json::json;
 use sqlx::PgPool;
 

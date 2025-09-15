@@ -1,5 +1,5 @@
 use actix_web::{web, HttpResponse, Responder};
-use api::models::clubStruct::AddClubStaffPayload;
+use api::models::Club_struct::AddClubStaffPayload;
 use serde_json::json;
 use sqlx::PgPool;
 

@@ -1,6 +1,6 @@
 use actix_web::{web, HttpResponse, Responder};
 
-use api::models::ama_poolStruct::Ama;
+use api::models::Ama_pool_struct::Ama;
 use serde_json::json;
 use sqlx::PgPool;
 

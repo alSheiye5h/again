@@ -1,13 +1,17 @@
 use actix_web::{web, HttpResponse, Responder};
 use serde_json::json;
 use sqlx::PgPool;
-use api::models::ama_poolStruct::{Ama, CreateCommunityAmaPayload};
+use api::models::Ama_pool_struct::{Ama, 
+Create_community_ama_payload
+};
 
 /// Handler to create a new AMA for a club's community.
 pub async fn create_club_community_ama(
     db_pool: web::Data<PgPool>,
     path: web::Path<i32>, // This is club_id from the URL
-    payload: web::Json<CreateCommunityAmaPayload>,
+    payload: web::Json<
+Create_community_ama_payload
+>,
 ) -> impl Responder {
     let club_id = path.into_inner();
 

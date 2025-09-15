@@ -10,7 +10,7 @@ use actix_web::{
 use sqlx::PgPool;
 
 use crate::jwt::validate_jwt::validate_jwt;
-use crate::models::jwtStruct::Keys;
+use crate::models::Jwt_struct::Keys;
 
 pub struct RedirectIfAuthenticated {
     pub redirect_path: String,
@@ -60,7 +60,7 @@ where
         let keys = req.app_data::<web::Data<Keys>>().cloned();
         let db_pool = req.app_data::<web::Data<PgPool>>().cloned();
         let service = self.service.clone();
-        let redirect_path = self.redirect_path.clone();
+        let _redirect_path = self.redirect_path.clone();
 
         Box::pin(async move {
             if let (Some(cookie), Some(keys), Some(db_pool)) = (token_cookie, keys.as_ref(), db_pool.as_ref()) {
