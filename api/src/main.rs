@@ -42,6 +42,21 @@ async fn main() -> std::io::Result<()> {
                         .configure(routes::event::event_routes)
                         .configure(routes::user::user_routes)
                 );
+                /*
+                cfg.service(
+                    web::scope("/api") 
+                        .service(web::scope("/auth")
+                            .wrap(RedirectIfAuthenticated { redirect_path: "/".to_string() })
+                            .configure(routes::auth::auth_routes))
+                        .configure(routes::auth::auth_routes)
+                        .configure(routes::post::post_routes)
+                        .configure(routes::club::club_routes)
+                        .configure(routes::community::community_routes)
+                        .configure(routes::announcement::announcement_routes)
+                        .configure(routes::event::event_routes)
+                        .configure(routes::user::user_routes)
+                );
+                 */
             })
     })
     .bind(("127.0.0.1", 8080))?
