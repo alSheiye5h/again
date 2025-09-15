@@ -12,11 +12,13 @@ use sqlx::PgPool;
 use crate::jwt::validate_jwt::validate_jwt;
 use crate::models::Jwt_struct::Keys;
 
-pub struct RedirectIfAuthenticated {
+pub struct 
+AuthMiddleware {
     pub redirect_path: String,
 }
 
-impl<S, B> Transform<S, ServiceRequest> for RedirectIfAuthenticated
+impl<S, B> Transform<S, ServiceRequest> for 
+AuthMiddleware
 where
     S: Service<ServiceRequest, Response = ServiceResponse<B>, Error = Error> + 'static,
     S::Future: 'static,
@@ -25,23 +27,27 @@ where
     type Response = ServiceResponse<EitherBody<B>>;
     type Error = Error;
     type InitError = ();
-    type Transform = RedirectIfAuthenticatedMiddleware<S>;
+    type Transform = 
+AuthMiddlewareMiddleware<S>;
     type Future = Ready<Result<Self::Transform, Self::InitError>>;
 
     fn new_transform(&self, service: S) -> Self::Future {
-        ready(Ok(RedirectIfAuthenticatedMiddleware {
+        ready(Ok(
+AuthMiddlewareMiddleware {
             service: Arc::new(service),
             redirect_path: self.redirect_path.clone(),
         }))
     }
 }
 
-pub struct RedirectIfAuthenticatedMiddleware<S> {
+pub struct 
+AuthMiddlewareMiddleware<S> {
     service: Arc<S>,
     redirect_path: String,
 }
 
-impl<S, B> Service<ServiceRequest> for RedirectIfAuthenticatedMiddleware<S>
+impl<S, B> Service<ServiceRequest> for 
+AuthMiddlewareMiddleware<S>
 where
     S: Service<ServiceRequest, Response = ServiceResponse<B>, Error = Error> + 'static,
     S::Future: 'static,

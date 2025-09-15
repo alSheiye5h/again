@@ -46,7 +46,8 @@ async fn main() -> std::io::Result<()> {
                 cfg.service(
                     web::scope("/api") 
                         .service(web::scope("/auth")
-                            .wrap(RedirectIfAuthenticated { redirect_path: "/".to_string() })
+                            .wrap(
+AuthMiddleware { redirect_path: "/".to_string() })
                             .configure(routes::auth::auth_routes))
                         .configure(routes::auth::auth_routes)
                         .configure(routes::post::post_routes)
