@@ -1,12 +1,16 @@
 use actix_web::{web, HttpResponse, Responder};
 use actix_web::cookie::Cookie;
 use sqlx::PgPool;
-use api::models::userStruct::UserLogin;
-use api::models::userStruct::DbUser;
+use bcrypt::verify;
+use api::jwt::create_jwt::create_jwt;
+use crate::models::userStruct::UserLogin;
+use crate::models::userStruct::DbUser;
+use api::models::jwtStruct::Keys;
 
 
 pub async fn login_user(
     db_pool: web::Data<PgPool>,
+    keys: web::Data<Keys>,
     user_data: web::Json<UserLogin>,
 ) -> impl Responder {
     if user_data.password.trim().is_empty() {
@@ -47,14 +51,24 @@ pub async fn login_user(
         Err(_) => return HttpResponse::InternalServerError().body("Database query failed"),
     };
 
-    // SECURITY WARNING: Storing and comparing plaintext passwords is a major vulnerability.
-    // 1. When a user registers, hash their password using a library like `bcrypt` or `argon2`
-    //    and store the resulting hash in the database, not the plain password.
-    // 2. During login, use the library's verification function to compare the provided
-    //    password against the stored hash in a secure, constant-time manner.
-    //    Example: `bcrypt::verify(user_data.password, &user.password_hash_from_db)`
-    if user.password == user_data.password {
-        let cookie = Cookie::build("user_id", user.id.to_string())
+    // Verify password hash
+    let valid_password = match verify(&user_data.password, &user.password) {
+        Ok(valid) => valid,
+        Err(_) => {
+            // Log the error but return a generic failure message to the user
+            eprintln!("Password verification error for user: {}", user.id);
+            return HttpResponse::Unauthorized().body("Invalid credentials");
+        }
+    };
+
+    if valid_password {
+        // Create JWT
+        let token = match create_jwt(&user.id.to_string(), keys.get_ref()) {
+            Ok(t) => t,
+            Err(_) => return HttpResponse::InternalServerError().body("Failed to create token"),
+        };
+
+        let cookie = Cookie::build("j_lg_ui", token)
             .path("/")
             .http_only(true)
             .finish();
@@ -63,7 +77,6 @@ pub async fn login_user(
             .cookie(cookie)
             .json(user)
     } else {
-        // Use a generic message to avoid confirming whether a user exists.
         HttpResponse::Unauthorized().body("Invalid credentials")
     }
 }

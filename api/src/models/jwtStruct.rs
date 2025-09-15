@@ -23,6 +23,7 @@ impl Claims {
     }
 }
 
+#[derive(Clone)]
 pub struct Keys {
     pub encoding: EncodingKey,
     pub decoding: DecodingKey,

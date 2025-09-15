@@ -7,3 +7,5 @@ target/
 # Optional: ignore common build outputs in Rust
 **/target/*
 
+# Ignore environment files
+.env

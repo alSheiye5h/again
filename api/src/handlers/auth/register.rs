@@ -1,7 +1,8 @@
 use actix_web::{web, HttpResponse, Responder};
 use sqlx::PgPool;
-use api::models::userStruct::User;
+use crate::models::userStruct::User;
 use serde_json::json;
+use bcrypt::{hash, DEFAULT_COST};
 
 pub async fn register_user(
     db_pool: web::Data<PgPool>, 
@@ -10,6 +11,15 @@ pub async fn register_user(
 
     println!("touch");
     let user_data = user.into_inner();
+
+    // Hash the user's password before storing it
+    let hashed_password = match hash(&user_data.password, DEFAULT_COST) {
+        Ok(h) => h,
+        Err(e) => {
+            eprintln!("Password hashing error: {:?}", e);
+            return HttpResponse::InternalServerError().json(json!({"status": "error", "message": "Failed to process registration."}));
+        }
+    };
 
     // Insert into database
     let result = sqlx::query!(
@@ -21,7 +31,7 @@ pub async fn register_user(
         user_data.username,
         user_data.name,
         user_data.email,
-        user_data.password,
+        hashed_password,
         user_data.profil_pic,
         user_data.bio,
     )

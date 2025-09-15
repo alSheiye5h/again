@@ -1,7 +1,9 @@
-use api::models::jwtStruct::{Claims, Keys};
-use jsonwebtoken::{encode, decode, Header, Validation, TokenData, errors::Result};
+use crate::models::jwtStruct::{Claims, Keys};
+use jsonwebtoken::{decode, TokenData, Validation};
 
-
-pub fn validate_jwt(token: &str, keys: &Keys) -> Result<TokenData<Claims>> {
+pub fn validate_jwt(
+    token: &str,
+    keys: &Keys,
+) -> Result<TokenData<Claims>, jsonwebtoken::errors::Error> {
     decode::<Claims>(token, &keys.decoding, &Validation::default())
 }
