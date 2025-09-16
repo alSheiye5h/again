@@ -6,7 +6,7 @@ use sqlx::PgPool;
 /// Handler to add a user as a member to a team.
 pub async fn add_member(
     db_pool: web::Data<PgPool>,
-    path: web::Path<i32>, // This will be the team_id
+    path: web::Path<i32>, // team_id
     payload: web::Json<AddTeamMemberPayload>,
 ) -> impl Responder {
     let team_id = path.into_inner();

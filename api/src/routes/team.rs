@@ -4,15 +4,24 @@ use crate::handlers::team::{
     list_teams::list_teams, update_team::update_team,
 };
 use crate::handlers::team::member::{
-    add_member::add_member, delete_member::delete_member, list_members::list_members,
+    add_member::add_member, delete_member::delete_member, get_member::get_member,
+    list_members::list_members,
     update_member::update_member,
 };
 
 
 pub fn team_routes(cfg: &mut web::ServiceConfig) {
-    cfg.route("/team", web::post().to(create_team))
-       .route("/team", web::get().to(list_teams))
-       .route("/team/{id}", web::get().to(get_team))
-       .route("/team/{id}", web::put().to(update_team))
-       .route("/team/{id}", web::delete().to(delete_team));
+    cfg.service(
+        web::scope("/team")
+            .route("", web::post().to(create_team))
+            .route("", web::get().to(list_teams))
+            .route("/{team_id}", web::get().to(get_team))
+            .route("/{team_id}", web::put().to(update_team))
+            .route("/{team_id}", web::delete().to(delete_team))
+            .route("/{team_id}/members", web::post().to(add_member))
+            .route("/{team_id}/members", web::get().to(list_members))
+            .route("/{team_id}/members/{user_id}", web::get().to(get_member))
+            .route("/{team_id}/members/{user_id}", web::put().to(update_member))
+            .route("/{team_id}/members/{user_id}", web::delete().to(delete_member)),
+    );
 }

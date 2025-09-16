@@ -6,7 +6,7 @@ use sqlx::PgPool;
 /// Handler to list all members of a specific team.
 pub async fn list_members(
     db_pool: web::Data<PgPool>,
-    path: web::Path<i32>, // This is team_id
+    path: web::Path<i32>, // team_id
 ) -> impl Responder {
     let team_id = path.into_inner();
 
