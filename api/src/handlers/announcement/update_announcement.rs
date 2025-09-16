@@ -1,6 +1,4 @@
-use crate::models::
-Announcement_struct::{
-Announcement_struct, 
+use crate::models::Announcement_struct::{AnnouncementStruct, 
 Announcement_update_payload};
 use actix_web::{web, HttpResponse, Responder};
 use sqlx::PgPool;
@@ -15,7 +13,7 @@ Announcement_update_payload>,
     // Fetch current announcement to get existing values
     let current = match sqlx::query_as!(
         
-Announcement_struct,
+AnnouncementStruct,
         r#"SELECT id, title, content, club_id, community_id, created_by, created_at, updated_at FROM announcements WHERE id = $1"#,
         *id as i32
     )
@@ -28,7 +26,7 @@ Announcement_struct,
 
     match sqlx::query_as!(
         
-Announcement_struct,
+AnnouncementStruct,
         r#"
         UPDATE announcements
         SET title = $1, content = $2, club_id = $3, community_id = $4, updated_at = NOW()

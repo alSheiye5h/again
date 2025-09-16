@@ -22,7 +22,8 @@ pub async fn list_club_community_amas(db_pool: web::Data<PgPool>, path: web::Pat
     let query = r#"
         SELECT a.id, a.created_by
         FROM ama a
-        INNER JOIN club_community_ama cca ON a.id = cca.ama_id
+        INNER JOIN 
+ClubCommunityAma cca ON a.id = cca.ama_id
         WHERE cca.community_id = $1
         ORDER BY a.id DESC
     "#;

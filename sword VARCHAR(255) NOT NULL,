@@ -14,13 +14,17 @@ Indexes:
     "users_email_key" UNIQUE CONSTRAINT, btree (email)
 Referenced by:
     TABLE "ama" CONSTRAINT "ama_created_by_fkey" FOREIGN KEY (created_by) REFERENCES users(id)
-    TABLE "ama_react" CONSTRAINT "ama_react_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
+    TABLE "
+AmaReact" CONSTRAINT "
+AmaReact_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
     TABLE "charity_event_donation" CONSTRAINT "charity_event_donation_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
     TABLE "charity_event" CONSTRAINT "charity_event_organizer_fkey" FOREIGN KEY (organizer) REFERENCES users(id)
     TABLE "charity_event_rsvp" CONSTRAINT "charity_event_rsvp_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
     TABLE "charity_event_volunteers" CONSTRAINT "charity_event_volunteers_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
     TABLE "club_ama" CONSTRAINT "club_ama_created_by_fkey" FOREIGN KEY (created_by) REFERENCES users(id)
-    TABLE "club_community_ama" CONSTRAINT "club_community_ama_created_by_fkey" FOREIGN KEY (created_by) REFERENCES users(id)
+    TABLE "
+ClubCommunityAma" CONSTRAINT "
+ClubCommunityAma_created_by_fkey" FOREIGN KEY (created_by) REFERENCES users(id)
     TABLE "club_community" CONSTRAINT "club_community_created_by_fkey" FOREIGN KEY (created_by) REFERENCES users(id)
     TABLE "club_community_pool" CONSTRAINT "club_community_pool_created_by_fkey" FOREIGN KEY (created_by) REFERENCES users(id)
     TABLE "club_discussion" CONSTRAINT "club_discussion_head_fkey" FOREIGN KEY (head) REFERENCES users(id)
@@ -47,7 +51,9 @@ Referenced by:
     TABLE "low_discussion_members" CONSTRAINT "low_discussion_members_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
     TABLE "low_discussion_staff" CONSTRAINT "low_discussion_staff_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
     TABLE "pool" CONSTRAINT "pool_created_by_fkey" FOREIGN KEY (created_by) REFERENCES users(id)
-    TABLE "pool_react" CONSTRAINT "pool_react_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
+    TABLE "
+PoolReact" CONSTRAINT "
+PoolReact_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
     TABLE "post" CONSTRAINT "post_created_by_fkey" FOREIGN KEY (created_by) REFERENCES users(id)
     TABLE "post_interaction" CONSTRAINT "post_interaction_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id)
     TABLE "regular_event" CONSTRAINT "regular_event_organizer_fkey" FOREIGN KEY (organizer) REFERENCES users(id)
