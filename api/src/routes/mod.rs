@@ -3,6 +3,7 @@ pub mod auth;
 pub mod club;
 pub mod community;
 pub mod post;
+pub mod discussion;
 pub mod event;
 pub mod user;
 pub mod team;

@@ -3,3 +3,5 @@ pub mod delete_discussion;
 pub mod get_discussion;
 pub mod list_discussions;
 pub mod update_discussion;
+pub mod member;
+pub mod content;
