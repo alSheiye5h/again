@@ -27,7 +27,7 @@ pub async fn create_event(
 
     let event_result = sqlx::query_as::<_, Event>(
         r#"
-        INSERT INTO regular_event (club_host, community_host, organizer, has_discussion)
+        INSERT INTO event (club_host, community_host, organizer, has_discussion)
         VALUES ($1, $2, $3, $4)
         RETURNING id, club_host, community_host, organizer, has_discussion, NULL as discussion_id
         "#,
@@ -58,7 +58,7 @@ pub async fn create_event(
 
         match discussion_id_result {
             Ok(discussion_id) => {
-                if let Err(e) = sqlx::query("INSERT INTO regular_event_discussion (regular_event_id, discussion_id) VALUES ($1, $2)")
+                if let Err(e) = sqlx::query("INSERT INTO event_discussion (event_id, discussion_id) VALUES ($1, $2)")
                     .bind(event.id)
                     .bind(discussion_id)
                     .execute(&mut *tx)
