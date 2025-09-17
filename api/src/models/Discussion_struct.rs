@@ -108,3 +108,29 @@ pub struct CreateDiscussionMessagePayload {
     pub content: String,
     pub created_by: i32,
 }
+
+#[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
+pub struct DiscussionAnnouncement {
+    pub id: i32,
+    pub discussion_id: i32,
+    pub title: String,
+    pub content: String,
+    pub created_by: i32,
+    #[serde(with = "chrono::serde::ts_seconds")]
+    pub created_at: DateTime<Utc>,
+    #[serde(with = "chrono::serde::ts_seconds")]
+    pub updated_at: DateTime<Utc>,
+}
+
+#[derive(Deserialize)]
+pub struct CreateDiscussionAnnouncementPayload {
+    pub title: String,
+    pub content: String,
+    pub created_by: i32,
+}
+
+#[derive(Deserialize)]
+pub struct UpdateDiscussionAnnouncementPayload {
+    pub title: Option<String>,
+    pub content: Option<String>,
+}
