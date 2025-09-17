@@ -10,3 +10,4 @@ pub mod Ama_pool_struct;
 pub mod Rsvp_struct;
 pub mod Tournament_struct;
 pub mod Jwt_struct;
+pub mod Team_struct;

@@ -1,7 +1,7 @@
 use actix_web::{web, HttpResponse, Responder};
 use serde_json::json;
 use sqlx::PgPool;
-use api::models::Ama_pool_struct::Ama;
+use crate::models::Ama_pool_struct::Ama;
 
 /// Handler to list all AMAs for a club's community.
 pub async fn list_club_community_amas(db_pool: web::Data<PgPool>, path: web::Path<i32>) -> impl Responder {

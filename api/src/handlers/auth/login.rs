@@ -2,11 +2,10 @@ use actix_web::{web, HttpResponse, Responder};
 use actix_web::cookie::Cookie;
 use sqlx::PgPool;
 use bcrypt::verify;
-use api::jwt::create_jwt::create_jwt;
 use crate::models::User_struct::UserLogin;
 use crate::models::User_struct::DbUser;
-use api::models::Jwt_struct::Keys;
-
+use crate::jwt::create_jwt;
+use crate::models::Jwt_struct::Keys;
 
 pub async fn login_user(
     db_pool: web::Data<PgPool>,

@@ -1,5 +1,5 @@
 use actix_web::{web, HttpResponse, Responder};
-use api::models::clubStruct::ClubCommunity;
+use crate::models::Club_struct::ClubCommunity;
 use serde_json::json;
 use sqlx::PgPool;
 

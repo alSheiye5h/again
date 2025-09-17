@@ -4,30 +4,21 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
 pub struct Team {
     pub id: i32,
-    pub created_by: i32,
+    pub created_by: Option<i32>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-
-pub struct Team {
-    pub id: i32,
-    pub created_by: i32,
+#[derive(Deserialize)]
+pub struct UpdateTeamPayload {
+    // Define fields that can be updated for a team
+    pub name: Option<String>,
 }
-
 
 
 /// Payload for creating a new team.
-#[derive(Debug, Deserialize)]
+
+#[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
 pub struct CreateTeamPayload {
     pub created_by: i32,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-
-pub struct TeamAchievement {
-    pub id: i32,
-    pub user_id: i32,
-    pub team_id: i32,
 }
 
 #[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
@@ -50,12 +41,6 @@ pub struct TeamMemberInfo {
     pub username: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-
-pub struct TeamAchievement {
-    pub id: i32,
-    pub team_id: i32,
-}
 /// Pagination query parameters.
 #[derive(Debug, Deserialize)]
 pub struct Pagination {
@@ -63,11 +48,10 @@ pub struct Pagination {
     pub per_page: Option<i64>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-
-pub struct TeamMembers {
+/// Represents a team achievement.
+#[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
+pub struct TeamAchievement {
     pub id: i32,
     pub user_id: i32,
     pub team_id: i32,
 }
-

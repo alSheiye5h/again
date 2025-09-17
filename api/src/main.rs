@@ -1,12 +1,16 @@
 use actix_web::{App, HttpServer, web};
 use dotenvy::dotenv;
 use std::env;
-
-mod handlers;
-mod models;
-mod routes;
-use database::connect_to_db;
+use api::database::connect_to_db;
 use api::models::Jwt_struct::Keys;
+use api::routes;
+// mod handlers;
+// mod models;
+// mod routes;
+
+// use api::*;
+// use database::connect_to_db;
+// use crate::models::Jwt_struct::Keys;
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
@@ -23,7 +27,7 @@ async fn main() -> std::io::Result<()> {
     let db_pool_data = web::Data::new(db_pool);
 
     // Initialize JWT Keys from environment variable
-    let jwt_secret = env::var("JWT_SECRET").expect("JWT_SECRET must be set in .env file");
+    let jwt_secret = env::var("JWT_SECRET").expect("JWT_SECRET must be set");
     let keys = Keys::new(&jwt_secret);
     let keys_data = web::Data::new(keys);
 

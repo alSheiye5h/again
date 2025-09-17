@@ -1,8 +1,8 @@
 use actix_web::{web, HttpResponse, Responder};
 use serde_json::json;
 use sqlx::PgPool;
-use api::models::Ama_pool_struct::Pool;
-use api::models::Club_struct::CreateCommunityPoolPayload;
+use crate::models::Ama_pool_struct::Pool;
+use crate::models::Club_struct::CreateCommunityPoolPayload;
 
 /// Handler to create a new Pool for a club's community.
 pub async fn create_club_community_pool(

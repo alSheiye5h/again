@@ -1,6 +1,6 @@
 use actix_web::{web, HttpResponse, Responder};
-use api::models::Club_struct::ClubCommunityMember;
-use api::models::Communitie_struct::AddMemberPayload;
+use crate::models::Club_struct::ClubCommunityMember;
+use crate::models::Communitie_struct::AddMemberPayload;
 use serde_json::json;
 use sqlx::PgPool;
 

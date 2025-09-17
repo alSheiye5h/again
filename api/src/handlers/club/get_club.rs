@@ -1,5 +1,5 @@
 use actix_web::{web, HttpResponse, Responder};
-use api::models::Club_struct::Club;
+use crate::models::Club_struct::Club;
 use sqlx::PgPool;
 
 /// Handler to get a club by its ID.
