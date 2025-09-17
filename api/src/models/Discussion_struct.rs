@@ -104,6 +104,11 @@ pub struct CreateDiscussionPayload {
     pub bio: Option<String>,
 }
 
+#[derive(Deserialize)]
+pub struct UpdateDiscussionPayload {
+    pub bio: Option<String>,
+}
+
 
 #[derive(Deserialize)]
 pub struct CreateDiscussionMessagePayload {
