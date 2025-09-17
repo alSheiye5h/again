@@ -135,12 +135,6 @@ pub struct DiscussionAnnouncement {
     pub updated_at: DateTime<Utc>,
 }
 
-#[derive(Deserialize)]
-pub struct CreateDiscussionAnnouncementPayload {
-    pub title: String,
-    pub content: String,
-    pub created_by: i32,
-}
 
 #[derive(Deserialize)]
 pub struct UpdateDiscussionAnnouncementPayload {

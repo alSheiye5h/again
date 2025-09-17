@@ -13,6 +13,14 @@ pub struct AnnouncementStruct {
     pub updated_at: DateTime<Utc>,
 }
 
+#[derive(Deserialize)]
+pub struct CreateAnnouncementPayload {
+    pub title: String,
+    pub content: String,
+    pub created_by: i32,
+}
+
+
 #[derive(Debug, Deserialize)]
 pub struct Announcement_create_payload {
     pub title: String,
