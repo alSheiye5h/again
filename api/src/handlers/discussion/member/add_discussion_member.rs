@@ -1,12 +1,7 @@
 use actix_web::{web, HttpResponse, Responder};
 use serde::Deserialize;
-use serde_json::json;
 use sqlx::PgPool;
-
-#[derive(Deserialize)]
-pub struct AddMemberPayload {
-    pub user_id: i32,
-}
+use crate::models::Discussion_struct::AddMemberPayload;
 
 /// Handler to add a user as a member to a discussion.
 pub async fn add_discussion_member(

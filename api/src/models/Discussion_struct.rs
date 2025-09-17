@@ -9,6 +9,7 @@ pub struct Discussion {
     pub admin: i32,
 }
 
+
 #[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
 pub struct DiscussionMessage {
     pub id: i32,
@@ -81,4 +82,16 @@ pub struct LowDiscussionStaff {
     pub id: i32,
     pub user_id: i32,
     pub discussion_id: i32,
+}
+
+#[derive(Deserialize)]
+pub struct AddMemberPayload {
+    pub user_id: i32,
+}
+
+#[derive(Debug, Serialize, sqlx::FromRow)]
+pub struct DiscussionMemberInfo {
+    pub user_id: i32,
+    pub username: String,
+    pub role: MemberRole,
 }

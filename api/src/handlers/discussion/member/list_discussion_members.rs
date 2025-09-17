@@ -3,13 +3,9 @@ use serde::Serialize;
 use serde_json::json;
 use sqlx::PgPool;
 use crate::models::Discussion_struct::MemberRole;
+use crate::models::Discussion_struct::DiscussionMemberInfo;
 
-#[derive(Debug, Serialize, sqlx::FromRow)]
-pub struct DiscussionMemberInfo {
-    pub user_id: i32,
-    pub username: String,
-    pub role: MemberRole,
-}
+
 
 /// Handler to list all members of a specific discussion.
 pub async fn list_discussion_members(
