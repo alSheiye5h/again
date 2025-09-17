@@ -28,7 +28,7 @@ pub async fn add_discussion_member(
 
     // Use ON CONFLICT to gracefully handle cases where the user is already a member.
     let result = sqlx::query(
-        "INSERT INTO discussion_members (user_id, discussion_id) VALUES ($1, $2) ON CONFLICT (user_id, discussion_id) DO NOTHING",
+        "INSERT INTO discussion_members (user_id, discussion_id, role) VALUES ($1, $2, 'member') ON CONFLICT (user_id, discussion_id) DO NOTHING",
     )
     .bind(payload.user_id)
     .bind(discussion_id_val)

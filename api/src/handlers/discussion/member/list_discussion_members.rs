@@ -2,11 +2,13 @@ use actix_web::{web, HttpResponse, Responder};
 use serde::Serialize;
 use serde_json::json;
 use sqlx::PgPool;
+use crate::models::Discussion_struct::MemberRole;
 
 #[derive(Debug, Serialize, sqlx::FromRow)]
 pub struct DiscussionMemberInfo {
     pub user_id: i32,
     pub username: String,
+    pub role: MemberRole,
 }
 
 /// Handler to list all members of a specific discussion.
@@ -16,7 +18,7 @@ pub async fn list_discussion_members(
 ) -> impl Responder {
     let result = sqlx::query_as::<_, DiscussionMemberInfo>(
         r#"
-        SELECT u.id as user_id, u.username
+        SELECT u.id as user_id, u.username, dm.role
         FROM users u
         JOIN discussion_members dm ON u.id = dm.user_id
         WHERE dm.discussion_id = $1

@@ -1,5 +1,6 @@
 use serde::{Deserialize, Serialize};
 use chrono::{DateTime, Utc};
+use sqlx::Type;
 
 #[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
 
@@ -17,6 +18,22 @@ pub struct DiscussionMessage {
     #[serde(with = "chrono::serde::ts_seconds")]
     pub created_at: DateTime<Utc>,
 }
+
+/// Represents the role of a user within a discussion.
+#[derive(Debug, Serialize, Deserialize, Clone, Copy, Type, PartialEq)]
+#[sqlx(type_name = "member_role", rename_all = "lowercase")]
+pub enum MemberRole {
+    Member,
+    Staff,
+    Admin,
+}
+
+/// Payload for updating a member's role in a discussion.
+#[derive(Deserialize)]
+pub struct UpdateMemberRolePayload {
+    pub role: MemberRole,
+}
+
 
 #[derive(Debug, Serialize, Deserialize)]
 
