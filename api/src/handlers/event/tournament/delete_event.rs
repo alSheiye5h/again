@@ -20,14 +20,14 @@ pub async fn delete_event(
 
     // Step 1: Find the discussion_id associated with the event, if any.
     let discussion_id_result = sqlx::query_scalar::<_, Option<i32>>(
-        "SELECT discussion_id FROM charity_event_discussion WHERE event_id = $1",
+        "SELECT discussion_id FROM tournament_event_discussion WHERE event_id = $1",
     )
     .bind(event_id_val)
     .fetch_optional(&mut *tx)
     .await;
 
     // Step 2: Delete the event. Assuming `ON DELETE CASCADE` on the `event_discussion` table's foreign key.
-    let event_delete_result = sqlx::query("DELETE FROM charity_event WHERE id = $1")
+    let event_delete_result = sqlx::query("DELETE FROM tournament_event WHERE id = $1")
         .bind(event_id_val)
         .execute(&mut *tx)
         .await;

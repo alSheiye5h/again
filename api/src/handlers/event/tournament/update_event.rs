@@ -20,7 +20,7 @@ pub async fn update_event(
     };
 
     // Fetch the current event state
-    let current_event = match sqlx::query_as::<_, Event>("SELECT * FROM charity_event WHERE id = $1")
+    let current_event = match sqlx::query_as::<_, Event>("SELECT * FROM tournament_event WHERE id = $1")
         .bind(event_id_val)
         .fetch_optional(&mut *tx)
         .await
@@ -45,7 +45,7 @@ pub async fn update_event(
     // Perform the update
     let update_result = sqlx::query_as::<_, Event>(
         r#"
-        UPDATE charity_event SET club_host = $1, community_host = $2
+        UPDATE tournament_event SET club_host = $1, community_host = $2
         WHERE id = $3
         RETURNING id, club_host, community_host, organizer, has_discussion
         "#,
