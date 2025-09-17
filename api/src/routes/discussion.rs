@@ -19,9 +19,10 @@ use crate::handlers::discussion::content::message::{
 };
 use crate::handlers::discussion::content::announcement::{
     create_discussion_announcement::create_discussion_announcement,
-    delete_discussion_announcement::unlink_discussion_announcement,
+    delete_discussion_announcement::delete_discussion_announcement,
     get_discussion_announcements::get_discussion_announcement,
     list_discussion_announcement::list_discussion_announcements,
+    update_discussion_announcement::update_discussion_announcement,
 };
 use actix_web::web;
 
@@ -57,7 +58,8 @@ pub fn discussion_routes(cfg: &mut web::ServiceConfig) {
                     .route("/announcements", web::post().to(create_discussion_announcement))
                     .route("/announcements", web::get().to(list_discussion_announcements))                    
                     .route("/announcements/{announcement_id}", web::get().to(get_discussion_announcement))
-                    .route("/announcements/{announcement_id}", web::delete().to(unlink_discussion_announcement)),
+                    .route("/announcements/{announcement_id}", web::put().to(update_discussion_announcement))
+                    .route("/announcements/{announcement_id}", web::delete().to(delete_discussion_announcement)),
             ),
     );
 }

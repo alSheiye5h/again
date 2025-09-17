@@ -17,8 +17,7 @@ pub struct DiscussionMessage {
     pub discussion_id: i32,
     pub content: String,
     pub created_by: i32,
-    #[serde(with = "chrono::serde::ts_seconds")]
-    pub created_at: DateTime<Utc>,
+    pub created_at: chrono::NaiveDateTime,
 }
 
 /// Represents the role of a user within a discussion.
