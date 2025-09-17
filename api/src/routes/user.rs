@@ -1,4 +1,4 @@
-use crate::handlers::user::{delete_user, get_user, list_users, update_user};
+use crate::handlers::user::handle::{delete_user, get_user, list_users, update_user};
 use actix_web::web;
 
 pub fn user_routes(cfg: &mut web::ServiceConfig) {
