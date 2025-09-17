@@ -3,12 +3,8 @@ use actix_web::{web, HttpResponse, Responder};
 use serde::Deserialize;
 use serde_json::json;
 use sqlx::PgPool;
+use crate::models::Discussion_struct::CreateDiscussionMessagePayload;
 
-#[derive(Deserialize)]
-pub struct CreateDiscussionMessagePayload {
-    pub content: String,
-    pub created_by: i32,
-}
 
 /// Handler to create a new message in a discussion.
 pub async fn create_discussion_message(

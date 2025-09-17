@@ -95,3 +95,16 @@ pub struct DiscussionMemberInfo {
     pub username: String,
     pub role: MemberRole,
 }
+
+
+#[derive(Deserialize)]
+pub struct CreateDiscussionPayload {
+    pub admin: i32,
+}
+
+
+#[derive(Deserialize)]
+pub struct CreateDiscussionMessagePayload {
+    pub content: String,
+    pub created_by: i32,
+}
