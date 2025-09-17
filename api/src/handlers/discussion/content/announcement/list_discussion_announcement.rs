@@ -4,7 +4,7 @@ use serde_json::json;
 use sqlx::PgPool;
 
 /// Handler to list all announcements linked to a specific discussion.
-pub async fn list_linked_discussion_announcements(
+pub async fn list_discussion_announcements(
     db_pool: web::Data<PgPool>,
     discussion_id: web::Path<i32>,
 ) -> impl Responder {

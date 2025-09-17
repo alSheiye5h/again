@@ -18,10 +18,10 @@ use crate::handlers::discussion::content::message::{
     update_discussion_message::update_discussion_message,
 };
 use crate::handlers::discussion::content::announcement::{
-    create_discussion_announcement::link_discussion_announcement,
+    create_discussion_announcement::create_discussion_announcement,
     delete_discussion_announcement::unlink_discussion_announcement,
-    get_discussion_announcements::get_linked_discussion_announcement,
-    list_discussion_announcement::list_linked_discussion_announcements,
+    get_discussion_announcements::get_discussion_announcement,
+    list_discussion_announcement::list_discussion_announcements,
 };
 use actix_web::web;
 
@@ -41,6 +41,12 @@ pub fn discussion_routes(cfg: &mut web::ServiceConfig) {
                     .route("/members/{user_id}", web::get().to(get_discussion_member))
                     .route("/members/{user_id}", web::put().to(update_discussion_member_role))
                     .route("/members/{user_id}", web::delete().to(remove_discussion_member))
+                    // Discussion Staff
+                    .route("/staff", web::get().to(crate::handlers::discussion::staff::list_staff::list_staff))
+                    .route("/staff", web::post().to(crate::handlers::discussion::staff::add_staff::add_staff))
+                    .route("/staff/{user_id}", web::get().to(crate::handlers::discussion::staff::get_staff::get_staff))
+                    .route("/staff/{user_id}", web::put().to(crate::handlers::discussion::staff::update_staff::update_staff_role))
+                    .route("/staff/{user_id}", web::delete().to(crate::handlers::discussion::staff::delete_staff::delete_staff))
                     // Discussion Messages
                     .route("/messages", web::get().to(list_discussion_messages))
                     .route("/messages", web::post().to(create_discussion_message))
@@ -48,9 +54,9 @@ pub fn discussion_routes(cfg: &mut web::ServiceConfig) {
                     .route("/messages/{message_id}", web::put().to(update_discussion_message))
                     .route("/messages/{message_id}", web::delete().to(delete_discussion_message))
                     // Discussion Announcements (linking existing announcements)
-                    .route("/announcements", web::get().to(list_linked_discussion_announcements))
-                    .route("/announcements/{announcement_id}", web::post().to(link_discussion_announcement))
-                    .route("/announcements/{announcement_id}", web::get().to(get_linked_discussion_announcement))
+                    .route("/announcements", web::post().to(create_discussion_announcement))
+                    .route("/announcements", web::get().to(list_discussion_announcements))                    
+                    .route("/announcements/{announcement_id}", web::get().to(get_discussion_announcement))
                     .route("/announcements/{announcement_id}", web::delete().to(unlink_discussion_announcement)),
             ),
     );

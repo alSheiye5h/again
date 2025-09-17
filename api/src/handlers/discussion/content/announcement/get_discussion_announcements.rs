@@ -4,7 +4,7 @@ use serde_json::json;
 use sqlx::PgPool;
 
 /// Handler to get a specific announcement linked to a discussion.
-pub async fn get_linked_discussion_announcement(
+pub async fn get_discussion_announcement(
     db_pool: web::Data<PgPool>,
     path: web::Path<(i32, i32)>,
 ) -> impl Responder {
