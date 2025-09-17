@@ -1,21 +1,18 @@
 use actix_web::{web, HttpResponse, Responder};
-use serde::Deserialize;
 use serde_json::json;
 use sqlx::PgPool;
 
-use crate::models::Tournament_struct::TournamentRsvp;
-use crate::models::Rsvp_struct::ConfigureRsvpPayload;
+use crate::models::Rsvp_struct::{ConfigureRsvpPayload, RegularRsvpConfig};
 
-
-/// Handler to create a new RSVP configuration for tournaments.
+/// Handler to create a new RSVP configuration for regular events.
 pub async fn configure_rsvp(
     db_pool: web::Data<PgPool>,
     path: web::Path<i32>, // event_id
     payload: web::Json<ConfigureRsvpPayload>,
 ) -> impl Responder {
     let event_id = path.into_inner();
-    let result = sqlx::query_as::<_, TournamentRsvp>(
-        "INSERT INTO tournament_rsvp (content, event_id) VALUES ($1, $2) RETURNING id, content, event_id",
+    let result = sqlx::query_as::<_, RegularRsvpConfig>(
+        "INSERT INTO regular_rsvp (content, event_id) VALUES ($1, $2) RETURNING id, content, event_id",
     )
     .bind(&payload.content)
     .bind(event_id)
