@@ -5,3 +5,4 @@ pub mod list_discussions;
 pub mod update_discussion;
 pub mod member;
 pub mod content;
+pub mod staff;
