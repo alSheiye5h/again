@@ -12,9 +12,10 @@ pub async fn create_discussion(
     payload: web::Json<CreateDiscussionPayload>,
 ) -> impl Responder {
     let result = sqlx::query_as::<_, Discussion>(
-        "INSERT INTO discussion (admin) VALUES ($1) RETURNING id, admin",
+        "INSERT INTO discussion (created_by, bio) VALUES ($1, $2) RETURNING id, created_by, bio",
     )
-    .bind(payload.admin)
+    .bind(payload.created_by)
+    .bind(&payload.bio)
     .fetch_one(db_pool.get_ref())
     .await;
 

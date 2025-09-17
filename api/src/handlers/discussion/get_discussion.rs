@@ -8,7 +8,7 @@ pub async fn get_discussion(
     db_pool: web::Data<PgPool>,
     discussion_id: web::Path<i32>,
 ) -> impl Responder {
-    let result = sqlx::query_as::<_, Discussion>("SELECT id, admin FROM discussion WHERE id = $1")
+    let result = sqlx::query_as::<_, Discussion>("SELECT id, created_by, bio FROM discussion WHERE id = $1")
         .bind(discussion_id.into_inner())
         .fetch_optional(db_pool.get_ref())
         .await;

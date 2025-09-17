@@ -6,7 +6,8 @@ use sqlx::Type;
 
 pub struct Discussion {
     pub id: i32,
-    pub admin: i32,
+    pub created_by: i32,
+    pub bio: Option<String>,
 }
 
 
@@ -99,7 +100,8 @@ pub struct DiscussionMemberInfo {
 
 #[derive(Deserialize)]
 pub struct CreateDiscussionPayload {
-    pub admin: i32,
+    pub created_by: i32,
+    pub bio: Option<String>,
 }
 
 
