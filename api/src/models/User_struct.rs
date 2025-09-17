@@ -57,3 +57,7 @@ pub struct DbUser {
     pub password: String,
 }
 
+#[derive(Deserialize)]
+pub struct FollowUserPayload {
+    pub follower_id: i32,
+}
