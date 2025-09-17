@@ -1,9 +1,7 @@
 use actix_web::{web, HttpResponse, Responder};
-use serde::Serialize;
 use serde_json::json;
-use sqlx::{FromRow, PgPool};
-
-use crate::models::Announcement_struct::{AnnouncementStruct, CreateAnnouncementPayload};
+use sqlx::PgPool;
+use crate::models::Announcement_struct::{DiscussionAnnouncement, CreateAnnouncementPayload};
 
 /// Handler to create a new announcement for a discussion.
 pub async fn create_discussion_announcement(
@@ -13,18 +11,7 @@ pub async fn create_discussion_announcement(
 ) -> impl Responder {
     let discussion_id_val = discussion_id.into_inner();
 
-    // Define a local struct for the response to ensure it matches the RETURNING clause.
-    // This avoids potential mismatches with a global AnnouncementStruct.
-    #[derive(FromRow, Serialize)]
-    struct NewAnnouncement {
-        id: i32,
-        title: String,
-        content: String,
-        created_by: i32,
-        discussion_id: Option<i32>,
-    }
-
-    match sqlx::query_as::<_, NewAnnouncement>(
+    match sqlx::query_as::<_, DiscussionAnnouncement>(
         r#"
         INSERT INTO announcements (title, content, created_by, discussion_id)
         VALUES ($1, $2, $3, $4)
@@ -39,6 +26,12 @@ pub async fn create_discussion_announcement(
     .await
     {
         Ok(announcement) => HttpResponse::Created().json(announcement),
+        Err(sqlx::Error::Database(db_err)) if db_err.is_foreign_key_violation() => {
+            HttpResponse::NotFound().json(json!({
+                "status": "error",
+                "message": format!("Discussion with ID {} not found.", discussion_id_val)
+            }))
+        }
         Err(e) => {
             eprintln!("Failed to create announcement: {:?}", e);
             HttpResponse::InternalServerError().json(json!({

@@ -12,6 +12,14 @@ pub struct AnnouncementStruct {
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
 }
+#[derive(sqlx::FromRow, Serialize)]
+pub struct DiscussionAnnouncement {
+    pub id: i32,
+    pub title: String,
+    pub content: String,
+    pub created_by: i32,
+    pub discussion_id: Option<i32>,
+}
 
 #[derive(Deserialize)]
 pub struct CreateAnnouncementPayload {

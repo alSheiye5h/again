@@ -1,20 +1,18 @@
-use crate::models::Announcement_struct::AnnouncementStruct;
+use crate::models::Announcement_struct::DiscussionAnnouncement;
 use actix_web::{web, HttpResponse, Responder};
 use serde_json::json;
 use sqlx::PgPool;
 
-/// Handler to list all announcements linked to a specific discussion.
+/// Handler to list all announcements for a specific discussion.
 pub async fn list_discussion_announcements(
     db_pool: web::Data<PgPool>,
     discussion_id: web::Path<i32>,
 ) -> impl Responder {
-    let result = sqlx::query_as::<_, AnnouncementStruct>(
+    let result = sqlx::query_as::<_, DiscussionAnnouncement>(
         r#"
-        SELECT a.*
-        FROM announcements a
-        JOIN discussion_announcements da ON a.id = da.announcement_id
-        WHERE da.discussion_id = $1
-        ORDER BY a.created_at DESC
+        SELECT id, title, content, created_by, discussion_id
+        FROM announcements
+        WHERE discussion_id = $1
         "#,
     )
     .bind(discussion_id.into_inner())
@@ -24,8 +22,8 @@ pub async fn list_discussion_announcements(
     match result {
         Ok(announcements) => HttpResponse::Ok().json(announcements),
         Err(e) => {
-            eprintln!("Failed to list linked discussion announcements: {:?}", e);
-            HttpResponse::InternalServerError().json(json!({"status": "error", "message": "Failed to list announcements."}))
+            eprintln!("Failed to list discussion announcements: {:?}", e);
+            HttpResponse::InternalServerError().json(json!({"status": "error", "message": "Failed to list discussion announcements."}))
         }
     }
 }

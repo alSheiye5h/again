@@ -1,6 +1,5 @@
 use crate::models::Discussion_struct::Discussion;
 use actix_web::{web, HttpResponse, Responder};
-use serde::Deserialize;
 use serde_json::json;
 use sqlx::PgPool;
 use crate::models::Discussion_struct::CreateDiscussionPayload;

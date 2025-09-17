@@ -1,21 +1,20 @@
-use crate::models::Announcement_struct::AnnouncementStruct;
+use crate::models::Announcement_struct::DiscussionAnnouncement;
 use actix_web::{web, HttpResponse, Responder};
 use serde_json::json;
 use sqlx::PgPool;
 
-/// Handler to get a specific announcement linked to a discussion.
+/// Handler to get a specific announcement for a discussion.
 pub async fn get_discussion_announcement(
     db_pool: web::Data<PgPool>,
     path: web::Path<(i32, i32)>,
 ) -> impl Responder {
     let (discussion_id, announcement_id) = path.into_inner();
 
-    let result = sqlx::query_as::<_, AnnouncementStruct>(
+    let result = sqlx::query_as::<_, DiscussionAnnouncement>(
         r#"
-        SELECT a.*
-        FROM announcements a
-        JOIN discussion_announcements da ON a.id = da.announcement_id
-        WHERE da.discussion_id = $1 AND da.announcement_id = $2
+        SELECT id, title, content, created_by, discussion_id
+        FROM announcements
+        WHERE discussion_id = $1 AND id = $2
         "#,
     )
     .bind(discussion_id)
@@ -25,10 +24,10 @@ pub async fn get_discussion_announcement(
 
     match result {
         Ok(announcement) => HttpResponse::Ok().json(announcement),
-        Err(sqlx::Error::RowNotFound) => HttpResponse::NotFound().json(json!({"status": "error", "message": "Linked announcement not found."})),
+        Err(sqlx::Error::RowNotFound) => HttpResponse::NotFound().json(json!({"status": "error", "message": "Announcement not found for this discussion."})),
         Err(e) => {
-            eprintln!("Failed to get linked discussion announcement: {:?}", e);
-            HttpResponse::InternalServerError().json(json!({"status": "error", "message": "Failed to retrieve announcement."}))
+            eprintln!("Failed to get discussion announcement: {:?}", e);
+            HttpResponse::InternalServerError().json(json!({"status": "error", "message": "Failed to retrieve discussion announcement."}))
         }
     }
 }
