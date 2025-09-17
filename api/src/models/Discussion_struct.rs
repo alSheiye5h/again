@@ -1,10 +1,21 @@
 use serde::{Deserialize, Serialize};
+use chrono::{DateTime, Utc};
 
 #[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
 
 pub struct Discussion {
     pub id: i32,
     pub admin: i32,
+}
+
+#[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
+pub struct DiscussionMessage {
+    pub id: i32,
+    pub discussion_id: i32,
+    pub content: String,
+    pub created_by: i32,
+    #[serde(with = "chrono::serde::ts_seconds")]
+    pub created_at: DateTime<Utc>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
