@@ -109,6 +109,12 @@ pub struct CreateDiscussionMessagePayload {
     pub created_by: i32,
 }
 
+#[derive(Deserialize)]
+pub struct UpdateDiscussionMessagePayload {
+    pub content: String,
+}
+
+
 #[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
 pub struct DiscussionAnnouncement {
     pub id: i32,
