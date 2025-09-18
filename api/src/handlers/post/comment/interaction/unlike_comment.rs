@@ -10,8 +10,8 @@ pub async fn unlike_comment(
 ) -> impl Responder {
     let (_post_id, comment_id, user_id) = path.into_inner();
 
-    let result = sqlx::query(
-        "DELETE FROM comment_interaction WHERE comment_id = $1 AND user_id = $2 AND interaction_type = $3",
+    let result: Result<sqlx::postgres::PgQueryResult, sqlx::Error> = sqlx::query(
+        "DELETE FROM post_comment_interactions WHERE comment_id = $1 AND user_id = $2 AND interaction_type = $3",
     )
     .bind(comment_id)
     .bind(user_id)
