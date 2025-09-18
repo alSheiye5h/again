@@ -1,5 +1,5 @@
-pub mod User_struct;
-pub mod Wallet_struct;
+pub mod user_struct;
+pub mod wallet_struct;
 pub mod club_struct;
 pub mod discussion_struct;
 pub mod event_struct;
@@ -9,6 +9,6 @@ pub mod communitie_struct;
 pub mod comment_struct;
 pub mod ama_pool_struct;
 pub mod rsvp_struct;
-pub mod Tournament_struct;
+pub mod tournament_struct;
 pub mod jwt_struct;
-pub mod Team_struct;
+pub mod team_struct;

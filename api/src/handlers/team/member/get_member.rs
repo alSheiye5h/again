@@ -1,4 +1,4 @@
-use crate::models::Team_struct::TeamMemberInfo;
+use crate::models::team_struct::TeamMemberInfo;
 use actix_web::{web, HttpResponse, Responder};
 use serde_json::json;
 use sqlx::PgPool;

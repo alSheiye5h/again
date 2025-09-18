@@ -1,4 +1,4 @@
-use crate::models::Team_struct::{Pagination, Team};
+use crate::models::team_struct::{Pagination, Team};
 use actix_web::{web, HttpResponse, Responder};
 use sqlx::PgPool;
 

@@ -2,8 +2,8 @@ use actix_web::{web, HttpResponse, Responder};
 use actix_web::cookie::Cookie;
 use sqlx::PgPool;
 use bcrypt::verify;
-use crate::models::User_struct::UserLogin;
-use crate::models::User_struct::DbUser;
+use crate::models::user_struct::UserLogin;
+use crate::models::user_struct::DbUser;
 use crate::jwt::create_jwt;
 use crate::models::jwt_struct::Keys;
 

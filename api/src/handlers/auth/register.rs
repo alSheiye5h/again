@@ -1,6 +1,6 @@
 use actix_web::{web, HttpResponse, Responder};
 use sqlx::PgPool;
-use crate::models::User_struct::User;
+use crate::models::user_struct::User;
 use serde_json::json;
 use bcrypt::{hash, DEFAULT_COST};
 

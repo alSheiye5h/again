@@ -1,4 +1,4 @@
-use crate::models::Team_struct::AddTeamMemberPayload;
+use crate::models::team_struct::AddTeamMemberPayload;
 use actix_web::{web, HttpResponse, Responder};
 use serde_json::json;
 use sqlx::PgPool;

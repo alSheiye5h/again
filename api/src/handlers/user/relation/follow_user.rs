@@ -1,7 +1,7 @@
 use actix_web::{web, HttpResponse, Responder};
 use serde_json::json;
 use sqlx::PgPool;
-use crate::models::User_struct::FollowUserPayload;
+use crate::models::user_struct::FollowUserPayload;
 
 
 /// Handler to make one user follow another.
