@@ -1,13 +1,13 @@
 use actix_web::web;
 use crate::handlers::post::{
     create_post::create_post, delete_post::delete_post, get_post::get_post_by_id,
-    list_posts::list_posts, update_post::update_post,
+    list_posts::list_posts, update_post::update_post, repost_post, share_post,
     interaction::{
         downvote_post, 
         like_post, 
         remove_vote, 
         unlike_post, 
-        upvote_post,
+        upvote_post
     },
     comment::{
         add_comment, 
