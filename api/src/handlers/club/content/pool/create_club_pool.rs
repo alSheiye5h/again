@@ -1,7 +1,7 @@
 use actix_web::{web, HttpResponse, Responder};
 use serde::Deserialize;
 use serde_json::json;
-use crate::models::Ama_pool_struct::Pool;
+use crate::models::ama_pool_struct::Pool;
 use sqlx::PgPool;
 
 #[derive(Deserialize)]

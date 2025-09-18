@@ -30,7 +30,7 @@ pub struct CreateAnnouncementPayload {
 
 
 #[derive(Debug, Deserialize)]
-pub struct Announcement_create_payload {
+pub struct AnnouncementCreatePayload {
     pub title: String,
     pub content: String,
     pub club_id: Option<i32>,
@@ -39,7 +39,7 @@ pub struct Announcement_create_payload {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct Announcement_update_payload {
+pub struct AnnouncementUpdatePayload {
     pub title: Option<String>,
     pub content: Option<String>,
     pub club_id: Option<i32>,

@@ -1,4 +1,4 @@
-use crate::models::Announcement_struct::AnnouncementStruct;
+use crate::models::announcement_struct::AnnouncementStruct;
 use actix_web::{web, HttpResponse, Responder};
 use serde::Deserialize;
 use sqlx::PgPool;

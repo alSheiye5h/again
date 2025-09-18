@@ -1,7 +1,7 @@
 use actix_web::{web, HttpResponse, Responder};
 use serde_json::json;
 use sqlx::PgPool;
-use crate::models::Announcement_struct::{DiscussionAnnouncement, CreateAnnouncementPayload};
+use crate::models::announcement_struct::{DiscussionAnnouncement, CreateAnnouncementPayload};
 
 /// Handler to create a new announcement for a discussion.
 pub async fn create_discussion_announcement(

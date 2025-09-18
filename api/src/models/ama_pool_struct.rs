@@ -1,5 +1,4 @@
 use serde::{Deserialize, Serialize};
-use sqlx::FromRow; // Make sure this is imported
 
 #[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
 pub struct Ama {

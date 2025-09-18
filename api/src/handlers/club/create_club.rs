@@ -1,5 +1,5 @@
 use actix_web::{web, HttpResponse, Responder};
-use crate::models::Club_struct::{Club, CreateClubPayload};
+use crate::models::club_struct::{Club, CreateClubPayload};
 use sqlx::PgPool;
 
 /// Handler to create a new club.

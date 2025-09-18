@@ -1,5 +1,5 @@
 use actix_web::{web, HttpResponse, Responder};
-use crate::models::Club_struct::ClubCommunity;
+use crate::models::club_struct::ClubCommunity;
 use serde_json::json;
 use sqlx::PgPool;
 /// Handler to get the community for a club.

@@ -1,5 +1,5 @@
 use actix_web::{web, HttpResponse, Responder};
-use crate::models::Club_struct::{ClubCommunity, UpdateCommunityPayload};
+use crate::models::club_struct::{ClubCommunity, UpdateCommunityPayload};
 use serde_json::json;
 use sqlx::PgPool;
 /// Handler to update the community for a club.

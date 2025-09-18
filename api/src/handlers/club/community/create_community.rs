@@ -1,7 +1,7 @@
 use actix_web::{web, HttpResponse, Responder};
-use crate::models::Club_struct::{ClubCommunity, CreateCommunityPayload};
+use crate::models::club_struct::{ClubCommunity, CreateCommunityPayload};
 use serde_json::json;
-use sqlx::{PgPool, Row};
+use sqlx::{PgPool};
 
 /// Handler to create or update the community for a club.
 /// This performs an "upsert" operation.

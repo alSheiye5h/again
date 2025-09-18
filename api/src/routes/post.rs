@@ -7,7 +7,8 @@ use crate::handlers::post::{
         like_post, 
         remove_vote, 
         unlike_post, 
-        upvote_post
+        upvote_post,
+        get_post_likes,
     },
     comment::{
         add_comment, 
@@ -16,6 +17,7 @@ use crate::handlers::post::{
         update_comment,
         interaction::{
             like_comment,
+            get_comment_likes,
             unlike_comment,
         },
     },
@@ -39,7 +41,9 @@ pub fn post_routes(cfg: &mut web::ServiceConfig) {
                     .route("/comments/{comment_id}", web::put().to(update_comment))
                     .route("/comments/{comment_id}", web::delete().to(delete_comment))
                     .route("/comments/{comment_id}/like", web::post().to(like_comment))
+                    .route("/comments/{comment_id}/like", web::get().to(get_comment_likes))
                     .route("/comments/{comment_id}/like/{user_id}", web::delete().to(unlike_comment))
+                    .route("/like", web::get().to(get_post_likes))
                     .route("/like", web::post().to(like_post))
                     .route("/like/{user_id}", web::delete().to(unlike_post))
                     .route("/repost", web::post().to(repost_post))

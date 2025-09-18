@@ -1,13 +1,13 @@
 pub mod User_struct;
 pub mod Wallet_struct;
-pub mod Club_struct;
+pub mod club_struct;
 pub mod Discussion_struct;
 pub mod Event_struct;
 pub mod Post_struct;
-pub mod Announcement_struct;
+pub mod announcement_struct;
 pub mod Communitie_struct;
 pub mod comment_struct;
-pub mod Ama_pool_struct;
+pub mod ama_pool_struct;
 pub mod Rsvp_struct;
 pub mod Tournament_struct;
 pub mod Jwt_struct;

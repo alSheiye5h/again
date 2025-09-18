@@ -1,5 +1,5 @@
-use crate::models::Announcement_struct::{
-Announcement_create_payload, 
+use crate::models::announcement_struct::{
+AnnouncementCreatePayload, 
 AnnouncementStruct};
 use actix_web::{web, HttpResponse, Responder};
 use sqlx::PgPool;
@@ -8,7 +8,7 @@ use sqlx::PgPool;
 pub async fn create_announcement(
     pool: web::Data<PgPool>,
     payload: web::Json<
-Announcement_create_payload>,
+AnnouncementCreatePayload>,
 ) -> impl Responder {
     match sqlx::query_as!(
         

@@ -20,8 +20,8 @@ pub struct Comment {
     pub post_id: i32,
 }
 
-#[derive(Debug, Serialize, Deserialize, Type, Clone, Copy, PartialEq)]
-#[sqlx(type_name = "comment_interaction_type", rename_all = "lowercase")]
+#[derive(Debug, Serialize, Deserialize, Type, Clone, Copy, PartialEq, Eq, Hash)]
+#[sqlx(type_name = "varchar", rename_all = "lowercase")]
 pub enum CommentInteractionType {
     Like,
     Upvote,

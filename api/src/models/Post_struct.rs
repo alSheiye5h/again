@@ -30,8 +30,8 @@ pub struct UpdatePostPayload {
     pub content: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, sqlx::Type, Clone, Copy, PartialEq)]
-#[sqlx(type_name = "post_interaction_type", rename_all = "lowercase")]
+#[derive(Debug, Serialize, Deserialize, sqlx::Type, Clone, Copy, PartialEq, Eq, Hash)]
+#[sqlx(type_name = "varchar", rename_all = "lowercase")]
 pub enum PostInteractionType {
     Like,
     Upvote,

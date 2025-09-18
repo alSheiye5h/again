@@ -5,7 +5,7 @@ use std::sync::Arc;
 use actix_web::body::EitherBody;
 use actix_web::{
     dev::{forward_ready, Service, ServiceRequest, ServiceResponse, Transform},
-    web, Error, HttpMessage, HttpResponse,
+    web, Error, HttpResponse,
 };
 use sqlx::PgPool;
 

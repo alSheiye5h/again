@@ -1,5 +1,5 @@
-use crate::models::Announcement_struct::{AnnouncementStruct, 
-Announcement_update_payload};
+use crate::models::announcement_struct::{AnnouncementStruct, 
+AnnouncementUpdatePayload};
 use actix_web::{web, HttpResponse, Responder};
 use sqlx::PgPool;
 
@@ -8,7 +8,7 @@ pub async fn update_announcement(
     pool: web::Data<PgPool>,
     id: web::Path<u32>,
     payload: web::Json<
-Announcement_update_payload>,
+AnnouncementUpdatePayload>,
 ) -> impl Responder {
     // Fetch current announcement to get existing values
     let current = match sqlx::query_as!(

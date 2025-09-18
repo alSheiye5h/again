@@ -1,8 +1,6 @@
 use actix_web::{web, HttpResponse, Responder};
-use serde::Serialize;
 use serde_json::json;
 use sqlx::PgPool;
-use crate::models::Discussion_struct::MemberRole;
 use crate::models::Discussion_struct::DiscussionMemberInfo;
 
 /// Handler to list all members of a specific discussion.
