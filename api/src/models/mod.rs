@@ -6,6 +6,7 @@ pub mod Event_struct;
 pub mod Post_struct;
 pub mod Announcement_struct;
 pub mod Communitie_struct;
+pub mod comment_struct;
 pub mod Ama_pool_struct;
 pub mod Rsvp_struct;
 pub mod Tournament_struct;

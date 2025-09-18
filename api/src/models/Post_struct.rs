@@ -36,6 +36,8 @@ pub enum PostInteractionType {
     Like,
     Upvote,
     Downvote,
+    Repost,
+    Share,
 }
 
 #[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
