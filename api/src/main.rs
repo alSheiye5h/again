@@ -4,13 +4,6 @@ use std::env;
 use api::database::connect_to_db;
 use api::models::jwt_struct::Keys;
 use api::routes;
-// mod handlers;
-// mod models;
-// mod routes;
-
-// use api::*;
-// use database::connect_to_db;
-// use crate::models::jwt_struct::Keys;
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
