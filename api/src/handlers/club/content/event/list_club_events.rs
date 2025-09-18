@@ -2,7 +2,7 @@ use actix_web::{web, HttpResponse, Responder};
 use serde_json::json;
 use sqlx::PgPool;
 
-use crate::models::Event_struct::Event;
+use crate::models::event_struct::Event;
 
 /// Handler to list all events hosted by a specific club.
 pub async fn list_club_events(

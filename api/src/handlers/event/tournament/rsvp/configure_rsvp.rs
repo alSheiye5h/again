@@ -2,7 +2,7 @@ use actix_web::{web, HttpResponse, Responder};
 use serde_json::json;
 use sqlx::PgPool;
 
-use crate::models::Rsvp_struct::{ConfigureRsvpPayload, RsvpConfig};
+use crate::models::rsvp_struct::{ConfigureRsvpPayload, RsvpConfig};
 
 /// Handler to create a new RSVP configuration for tournaments.
 pub async fn configure_rsvp(

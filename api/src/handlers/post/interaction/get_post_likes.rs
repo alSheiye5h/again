@@ -2,7 +2,7 @@ use actix_web::{web, HttpResponse, Responder};
 use serde_json::json;
 use sqlx::PgPool;
 
-use crate::models::Post_struct::PostInteraction;
+use crate::models::post_struct::PostInteraction;
 
 /// Handler to retrieve all 'like' interactions for a post.
 pub async fn get_post_likes(

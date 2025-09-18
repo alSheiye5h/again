@@ -1,7 +1,7 @@
 use actix_web::{web, HttpResponse, Responder};
 use serde_json::json;
 use sqlx::PgPool;
-use crate::models::Rsvp_struct::UserRsvp;
+use crate::models::rsvp_struct::UserRsvp;
 
 /// Handler to list all RSVPs for a tournament event.
 pub async fn list_rsvps_for_event(

@@ -3,7 +3,7 @@ use serde_json::json;
 use sqlx::PgPool;
 
 use crate::models::comment_struct::UpdateCommentPayload;
-use crate::models::Discussion_struct::DiscussionMessage;
+use crate::models::discussion_struct::DiscussionMessage;
 
 /// Handler to update a comment (message).
 /// The post_id from the path is not used directly in the query but ensures a RESTful URL structure.

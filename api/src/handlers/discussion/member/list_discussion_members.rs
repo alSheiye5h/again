@@ -1,7 +1,7 @@
 use actix_web::{web, HttpResponse, Responder};
 use serde_json::json;
 use sqlx::PgPool;
-use crate::models::Discussion_struct::DiscussionMemberInfo;
+use crate::models::discussion_struct::DiscussionMemberInfo;
 
 /// Handler to list all members of a specific discussion.
 pub async fn list_discussion_members(

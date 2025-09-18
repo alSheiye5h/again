@@ -2,7 +2,7 @@ use actix_web::{web, HttpResponse, Responder};
 use serde_json::json;
 use sqlx::PgPool;
 
-use crate::models::Rsvp_struct::RsvpConfig;
+use crate::models::rsvp_struct::RsvpConfig;
 
 /// Handler to get RSVP configuration choices for a tournament event.
 pub async fn get_rsvp_choices(

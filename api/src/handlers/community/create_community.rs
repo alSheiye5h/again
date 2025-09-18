@@ -1,5 +1,5 @@
 use actix_web::{web, HttpResponse, Responder};
-use crate::models::Communitie_struct::{Community, CreateCommunityPayload};
+use crate::models::communitie_struct::{Community, CreateCommunityPayload};
 use serde_json::json;
 use sqlx::PgPool;
 

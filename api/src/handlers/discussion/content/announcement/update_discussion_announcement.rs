@@ -1,5 +1,5 @@
 use crate::models::announcement_struct::DiscussionAnnouncement;
-use crate::models::Discussion_struct::UpdateDiscussionAnnouncementPayload;
+use crate::models::discussion_struct::UpdateDiscussionAnnouncementPayload;
 use actix_web::{web, HttpResponse, Responder};
 use serde_json::json;
 use sqlx::PgPool;

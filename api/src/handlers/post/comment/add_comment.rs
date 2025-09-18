@@ -3,7 +3,7 @@ use serde_json::json;
 use sqlx::PgPool;
 
 use crate::models::comment_struct::CreateCommentPayload;
-use crate::models::Discussion_struct::DiscussionMessage;
+use crate::models::discussion_struct::DiscussionMessage;
 
 /// Handler to add a comment (message) to a post's discussion.
 pub async fn add_comment(

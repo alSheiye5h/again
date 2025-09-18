@@ -1,8 +1,8 @@
 use actix_web::{web, HttpResponse, Responder};
 use serde_json::json;
 use sqlx::PgPool;
-use crate::models::Discussion_struct::AddMemberPayload;
-use crate::models::Discussion_struct::MemberRole;
+use crate::models::discussion_struct::AddMemberPayload;
+use crate::models::discussion_struct::MemberRole;
 
 /// Handler to add a user as a member to a discussion.
 pub async fn add_discussion_member(

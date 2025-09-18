@@ -1,5 +1,5 @@
 use actix_web::{web, HttpResponse, Responder};
-use crate::models::Event_struct::{CreateEventPayload, Event};
+use crate::models::event_struct::{CreateEventPayload, Event};
 use serde_json::json;
 use sqlx::PgPool;
 

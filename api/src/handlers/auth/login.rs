@@ -5,7 +5,7 @@ use bcrypt::verify;
 use crate::models::User_struct::UserLogin;
 use crate::models::User_struct::DbUser;
 use crate::jwt::create_jwt;
-use crate::models::Jwt_struct::Keys;
+use crate::models::jwt_struct::Keys;
 
 pub async fn login_user(
     db_pool: web::Data<PgPool>,

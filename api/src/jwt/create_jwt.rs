@@ -1,4 +1,4 @@
-use crate::models::Jwt_struct::{Claims, Keys};
+use crate::models::jwt_struct::{Claims, Keys};
 use jsonwebtoken::{encode, Header};
 
 /// Creates a JSON Web Token (JWT).

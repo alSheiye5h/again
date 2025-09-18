@@ -1,7 +1,7 @@
 use actix_web::{web, HttpResponse, Responder};
 use serde_json::json;
 use sqlx::PgPool;
-use crate::models::Communitie_struct::AddCommunityStaffPayload;
+use crate::models::communitie_struct::AddCommunityStaffPayload;
 
 /// Handler to add a user as staff to a community.
 pub async fn add_community_staff(

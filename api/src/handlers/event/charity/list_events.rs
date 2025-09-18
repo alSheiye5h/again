@@ -2,7 +2,7 @@ use actix_web::{web, HttpResponse, Responder};
 use serde_json::json;
 use sqlx::PgPool;
 
-use crate::models::Event_struct::Event;
+use crate::models::event_struct::Event;
 
 /// Handler to list all charity events.
 pub async fn list_events(db_pool: web::Data<PgPool>) -> impl Responder {

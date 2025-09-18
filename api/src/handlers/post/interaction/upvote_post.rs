@@ -1,5 +1,5 @@
 use crate::handlers::post::interaction::common::create_interaction;
-use crate::models::Post_struct::{CreateInteractionPayload, PostInteractionType};
+use crate::models::post_struct::{CreateInteractionPayload, PostInteractionType};
 use actix_web::{web, Responder};
 use sqlx::PgPool;
 

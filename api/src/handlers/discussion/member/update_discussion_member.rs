@@ -1,4 +1,4 @@
-use crate::models::Discussion_struct::UpdateMemberRolePayload;
+use crate::models::discussion_struct::UpdateMemberRolePayload;
 use actix_web::{web, HttpResponse, Responder};
 use serde_json::json;
 use sqlx::PgPool;

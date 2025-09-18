@@ -2,7 +2,7 @@ use actix_web::{web, HttpResponse, Responder};
 use serde_json::json;
 use sqlx::PgPool;
 
-use crate::models::Post_struct::{
+use crate::models::post_struct::{
     CreateInteractionPayload, PostInteraction, PostInteractionType,
 };
 

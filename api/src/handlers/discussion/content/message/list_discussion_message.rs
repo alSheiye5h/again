@@ -1,4 +1,4 @@
-use crate::models::Discussion_struct::DiscussionMessage;
+use crate::models::discussion_struct::DiscussionMessage;
 use actix_web::{web, HttpResponse, Responder};
 use serde_json::json;
 use sqlx::PgPool;

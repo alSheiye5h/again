@@ -1,8 +1,8 @@
-use crate::models::Discussion_struct::DiscussionMessage;
+use crate::models::discussion_struct::DiscussionMessage;
 use actix_web::{web, HttpResponse, Responder};
 use serde_json::json;
 use sqlx::PgPool;
-use crate::models::Discussion_struct::CreateDiscussionMessagePayload;
+use crate::models::discussion_struct::CreateDiscussionMessagePayload;
 
 
 /// Handler to create a new message in a discussion.

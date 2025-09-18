@@ -10,7 +10,7 @@ use actix_web::{
 use sqlx::PgPool;
 
 use crate::jwt::validate_jwt::validate_jwt;
-use crate::models::Jwt_struct::Keys;
+use crate::models::jwt_struct::Keys;
 
 pub struct 
 AuthMiddleware {
