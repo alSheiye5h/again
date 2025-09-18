@@ -1,6 +1,7 @@
 use actix_web::web;
 
 use crate::handlers::club::{
+    content::event::list_club_events::list_club_events,
     content::ama::{
         create_club_ama::create_club_ama,
        list_club_amas::list_club_amas,
@@ -82,6 +83,8 @@ pub fn club_routes(cfg: &mut web::ServiceConfig) {
                             // Pool routes
                             .route("/pool", web::post().to(create_club_pool))
                             .route("/pool", web::get().to(list_club_pools))
+                            // Event routes
+                            .route("/events", web::get().to(list_club_events))
                     )
                           // Community routes (singular, one-to-one with club)
                           .service(
