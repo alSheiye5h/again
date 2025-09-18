@@ -1,8 +1,8 @@
 pub mod add_comment;
 pub mod delete_comment;
+pub mod interaction;
 pub mod list_comments;
 pub mod update_comment;
-pub mod interaction;
 
 pub use add_comment::add_comment;
 pub use delete_comment::delete_comment;

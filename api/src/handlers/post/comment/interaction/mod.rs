@@ -1,3 +1,4 @@
+pub mod common;
 pub mod like_comment;
 pub mod unlike_comment;
 
