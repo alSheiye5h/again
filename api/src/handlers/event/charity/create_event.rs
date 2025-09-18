@@ -8,14 +8,6 @@ pub async fn create_event(
     db_pool: web::Data<PgPool>,
     payload: web::Json<CreateEventPayload>,
 ) -> impl Responder {
-    // Validate that exactly one of club_host or community_host is provided.
-    if payload.club_host.is_some() == payload.community_host.is_some() {
-        return HttpResponse::BadRequest().json(json!({
-            "status": "error",
-            "message": "An event must have exactly one host: either a club_host or a community_host."
-        }));
-    }
-
     let mut tx = match db_pool.begin().await {
         Ok(tx) => tx,
         Err(e) => {
@@ -43,8 +35,16 @@ pub async fn create_event(
         Ok(event) => event,
         Err(e) => {
             eprintln!("Failed to create event: {:?}", e);
-            return HttpResponse::InternalServerError()
-                .json(json!({"status": "error", "message": "Failed to create event."}));
+            // Check for a specific database constraint violation
+            if let Some(db_err) = e.as_database_error() {
+                if db_err.code() == Some("23514".into()) { // '23514' is for a check constraint violation
+                    return HttpResponse::BadRequest().json(json!({
+                        "status": "error",
+                        "message": "An event must have exactly one host: either a club_host or a community_host."
+                    }));
+                }
+            }
+            return HttpResponse::InternalServerError().json(json!({"status": "error", "message": "Failed to create event."}));
         }
     };
 

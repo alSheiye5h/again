@@ -34,14 +34,6 @@ pub async fn update_event(
     let new_club_host = payload.club_host.or(current_event.club_host);
     let new_community_host = payload.community_host.or(current_event.community_host);
 
-    // Validate the new host state
-    if new_club_host.is_some() == new_community_host.is_some() {
-        return HttpResponse::BadRequest().json(json!({
-            "status": "error",
-            "message": "An event must have exactly one host: either a club_host or a community_host."
-        }));
-    }
-
     // Perform the update
     let update_result = sqlx::query_as::<_, Event>(
         r#"
@@ -61,6 +53,17 @@ pub async fn update_event(
             Ok(_) => HttpResponse::Ok().json(updated_event),
             Err(e) => HttpResponse::InternalServerError().json(json!({"status": "error", "message": format!("Failed to commit transaction: {}", e)})),
         },
-        Err(e) => HttpResponse::InternalServerError().json(json!({"status": "error", "message": format!("Failed to update event: {}", e)})),
+        Err(e) => {
+            // Check for a specific database constraint violation
+            if let Some(db_err) = e.as_database_error() {
+                if db_err.code() == Some("23514".into()) { // '23514' is for a check constraint violation
+                    return HttpResponse::BadRequest().json(json!({
+                        "status": "error",
+                        "message": "An event must have exactly one host: either a club_host or a community_host."
+                    }));
+                }
+            }
+            HttpResponse::InternalServerError().json(json!({"status": "error", "message": format!("Failed to update event: {}", e)}))
+        },
     }
 }
