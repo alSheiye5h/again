@@ -12,7 +12,7 @@ pub async fn get_rsvp_choices(
     let event_id = path.into_inner();
 
     let result = sqlx::query_as::<_, RsvpConfig>(
-        "SELECT id, event_id, option_text FROM tournament_event_rsvp_config WHERE event_id = $1",
+        "SELECT id, event_id, option_text FROM charity_event_rsvp_config WHERE event_id = $1",
     )
     .bind(event_id)
     .fetch_all(db_pool.get_ref())
