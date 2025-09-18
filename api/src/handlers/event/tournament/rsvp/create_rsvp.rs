@@ -11,26 +11,7 @@ pub async fn create_or_update_rsvp(
 ) -> impl Responder {
     let event_id = path.into_inner();
 
-    let mut tx = match db_pool.begin().await {
-        Ok(tx) => tx,
-        Err(e) => return HttpResponse::InternalServerError().json(json!({"status": "error", "message": format!("Failed to start transaction: {}", e)})),
-    };
-
-    // 1. Find the ID of the RSVP option from the provided text.
-    let rsvp_option_id = match sqlx::query_scalar::<_, i32>(
-        "SELECT id FROM tournament_event_rsvp_config WHERE event_id = $1 AND option_text = $2"
-    )
-    .bind(event_id)
-    .bind(&payload.rsvp)
-    .fetch_optional(&mut *tx)
-    .await {
-        Ok(Some(id)) => id,
-        Ok(None) => return HttpResponse::BadRequest().json(json!({"status": "error", "message": "Invalid RSVP option. Please ensure the RSVP option is valid for this event."})),
-        Err(e) => return HttpResponse::InternalServerError().json(json!({"status": "error", "message": format!("Database error while validating RSVP option: {}", e)})),
-    };
-
-    // 2. Insert or update the user's RSVP using the found ID.
-    if let Err(e) = sqlx::query(
+    let result = sqlx::query(
         r#"
         INSERT INTO tournament_event_rsvp (user_id, event_id, rsvp)
         VALUES ($1, $2, $3)
@@ -39,17 +20,22 @@ pub async fn create_or_update_rsvp(
     )
     .bind(payload.user_id)
     .bind(event_id)
-    .bind(rsvp_option_id)
-    .execute(&mut *tx)
-    .await {
-        // The only likely error here is a different foreign key violation (e.g., user_id),
-        // but we'll handle it generically. The `ON CONFLICT` handles the unique constraint.
-        return HttpResponse::InternalServerError().json(json!({"status": "error", "message": format!("Failed to record RSVP: {}", e)}));
-    }
+    .bind(payload.rsvp)
+    .execute(&**db_pool)
+    .await;
 
-    // 3. Commit the transaction.
-    match tx.commit().await {
+    match result {
         Ok(_) => HttpResponse::Ok().json(json!({"status": "success", "message": "RSVP recorded successfully."})),
-        Err(e) => HttpResponse::InternalServerError().json(json!({"status": "error", "message": format!("Failed to commit transaction: {}", e)})),
+        Err(e) => {
+            if let Some(db_err) = e.as_database_error() {
+                if db_err.code() == Some("23503".into()) { // foreign_key_violation
+                    return HttpResponse::BadRequest().json(json!({
+                        "status": "error",
+                        "message": "Invalid RSVP option. Please ensure the RSVP option is valid for this event."
+                    }));
+                }
+            }
+            HttpResponse::InternalServerError().json(json!({"status": "error", "message": format!("Failed to record RSVP: {}", e)}))
+        },
     }
 }

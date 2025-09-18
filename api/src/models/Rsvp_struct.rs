@@ -16,7 +16,7 @@ pub struct RegularRsvp {
 #[derive(Deserialize)]
 pub struct RsvpPayload {
     pub user_id: i32,
-    pub rsvp: String, // The text of the RSVP option, e.g., "Going", "Maybe"
+    pub rsvp: i32, // e.g., 1 for 'Yes', 0 for 'No', 2 for 'Maybe'
 }
 
 #[derive(Serialize, sqlx::FromRow)]
