@@ -20,8 +20,14 @@ pub async fn update_event(
     };
 
     // Fetch the current event state
-    let current_event = match sqlx::query_as::<_, Event>("SELECT * FROM charity_event WHERE id = $1")
-        .bind(event_id_val)
+    let current_event = match sqlx::query_as::<_, Event>(r#"
+            SELECT 
+                e.id, e.club_host, e.community_host, e.organizer, e.has_discussion,
+                ed.discussion_id
+            FROM charity_event e
+            LEFT JOIN charity_event_discussion ed ON e.id = ed.event_id
+            WHERE e.id = $1
+        "#).bind(event_id_val)
         .fetch_optional(&mut *tx)
         .await
     {
@@ -35,22 +41,29 @@ pub async fn update_event(
     let new_community_host = payload.community_host.or(current_event.community_host);
 
     // Perform the update
-    let update_result = sqlx::query_as::<_, Event>(
+    let update_result = sqlx::query(
         r#"
         UPDATE charity_event SET club_host = $1, community_host = $2
         WHERE id = $3
-        RETURNING id, club_host, community_host, organizer, has_discussion
         "#,
     )
     .bind(new_club_host)
     .bind(new_community_host)
     .bind(event_id_val)
-    .fetch_one(&mut *tx)
+    .execute(&mut *tx)
     .await;
 
     match update_result {
-        Ok(updated_event) => match tx.commit().await {
-            Ok(_) => HttpResponse::Ok().json(updated_event),
+        Ok(_) => match tx.commit().await {
+            Ok(_) => {
+                // Re-fetch the full event data to return to the client
+                let updated_event = Event {
+                    club_host: new_club_host,
+                    community_host: new_community_host,
+                    ..current_event
+                };
+                HttpResponse::Ok().json(updated_event)
+            },
             Err(e) => HttpResponse::InternalServerError().json(json!({"status": "error", "message": format!("Failed to commit transaction: {}", e)})),
         },
         Err(e) => {

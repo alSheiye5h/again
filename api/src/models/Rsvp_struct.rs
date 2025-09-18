@@ -1,11 +1,11 @@
 use serde::{Deserialize, Serialize};
 
-/// Represents the configuration for an RSVP on a regular event.
+/// Represents a generic RSVP configuration option.
 #[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
-pub struct RegularRsvpConfig {
+pub struct RsvpConfig {
     pub id: i32,
-    pub content: String,
     pub event_id: i32,
+    pub option_text: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -16,7 +16,7 @@ pub struct RegularRsvp {
 #[derive(Deserialize)]
 pub struct RsvpPayload {
     pub user_id: i32,
-    pub rsvp: i32, // e.g., 1 for 'Yes', 0 for 'No', 2 for 'Maybe'
+    pub rsvp: String, // The text of the RSVP option, e.g., "Going", "Maybe"
 }
 
 #[derive(Serialize, sqlx::FromRow)]
@@ -28,5 +28,5 @@ pub struct UserRsvp {
 
 #[derive(Deserialize)]
 pub struct ConfigureRsvpPayload {
-    pub content: String,
+    pub choices: Vec<String>,
 }

@@ -52,8 +52,8 @@ pub fn event_routes(cfg: &mut web::ServiceConfig) {
                 // Charity Event RSVP routes
                 .service(web::scope("/{id}/rsvp")
                     .route("", web::get().to(list_charity_rsvps_for_event))
-                    .route("", web::post().to(create_or_update_charity_rsvp))
-                    .route("/configure", web::post().to(configure_charity_rsvp))
+                    .route("", web::post().to(create_or_update_charity_rsvp)) // for user
+                    .route("/configure", web::post().to(configure_charity_rsvp)) // for organizer
                     .route("/{user_id}", web::delete().to(delete_charity_rsvp))
                 )
         )        

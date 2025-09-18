@@ -18,10 +18,3 @@ pub struct TournamentEventRsvp {
     pub event_id: i32,
     pub rsvp: i32,
 }
-
-#[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
-pub struct TournamentRsvp {
-    pub id: i32,
-    pub content: String,
-    pub event_id: i32,
-}

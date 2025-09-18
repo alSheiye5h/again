@@ -62,12 +62,6 @@ pub struct CharityEventVolunteers {
 
 #[derive(Debug, Serialize, Deserialize)]
 
-pub struct CharityRsvp {
-    pub id: i32,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-
 pub struct EventAssistant {
     pub id: i32,
     pub user_id: i32,
@@ -98,12 +92,6 @@ pub struct RegularEventRsvp {
     pub user_id: i32,
     pub event_id: i32,
     pub rsvp: i32,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-
-pub struct RegularRsvp {
-    pub id: i32,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
