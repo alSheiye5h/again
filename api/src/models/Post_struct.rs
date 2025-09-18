@@ -29,10 +29,24 @@ pub struct CreatePostPayload {
 pub struct UpdatePostPayload {
     pub content: String,
 }
-#[derive(Debug, Serialize, Deserialize)]
 
+#[derive(Debug, Serialize, Deserialize, sqlx::Type, Clone, Copy, PartialEq)]
+#[sqlx(type_name = "post_interaction_type", rename_all = "lowercase")]
+pub enum PostInteractionType {
+    Like,
+    Upvote,
+    Downvote,
+}
+
+#[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
 pub struct PostInteraction {
     pub id: i32,
     pub user_id: i32,
     pub post_id: i32,
+    pub interaction_type: PostInteractionType,
+}
+
+#[derive(Deserialize)]
+pub struct CreateInteractionPayload {
+    pub user_id: i32,
 }

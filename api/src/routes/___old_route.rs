@@ -1,6 +1,11 @@
 // src/routes.rs
 use actix_web::web;
 
+use crate::handlers::post::interaction::like_post::like_post;
+use crate::handlers::post::interaction::unlike_post::unlike_post;
+use crate::handlers::post::interaction::upvote_post::upvote_post;
+use crate::handlers::post::interaction::downvote_post::downvote_post;
+use crate::handlers::post::interaction::remove_vote::remove_vote;
 use crate::handlers::auth::register::register_user;
 use crate::handlers::auth::login::login_user;
 use crate::handlers::post::create_post::create_post;
@@ -49,7 +54,13 @@ pub fn post_routes(cfg: &mut web::ServiceConfig) {
        .route("/post", web::get().to(list_posts))
        .route("/post/{id}", web::get().to(get_post_by_id))
        .route("/post/{id}", web::put().to(update_post))
-       .route("/post/{id}", web::delete().to(delete_post));
+       .route("/post/{id}", web::delete().to(delete_post))
+       // Post Interactions
+       .route("/post/{post_id}/like", web::post().to(like_post))
+       .route("/post/{post_id}/like/{user_id}", web::delete().to(unlike_post))
+       .route("/post/{post_id}/upvote", web::post().to(upvote_post))
+       .route("/post/{post_id}/downvote", web::post().to(downvote_post))
+       .route("/post/{post_id}/vote/{user_id}", web::delete().to(remove_vote));
 }
 
 pub fn club_routes(cfg: &mut web::ServiceConfig) {
@@ -97,4 +108,3 @@ pub fn community_routes(cfg: &mut web::ServiceConfig) {
             .route("/{community_id}/staff/{user_id}", web::delete().to(delete_community_staff))
     );
 }
-
