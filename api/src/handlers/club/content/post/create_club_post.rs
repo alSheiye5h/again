@@ -22,15 +22,14 @@ pub async fn create_club_post(
 
     // Step 1: Create the post in the `post` table.
     let post_result = sqlx::query_as::<_, Post>(
-        "INSERT INTO post (created_by, content, has_discussion) VALUES ($1, $2, $3) RETURNING id, content, created_by, has_discussion, NULL as discussion_id",
+        "INSERT INTO post (user_id, content) VALUES ($1, $2) RETURNING *",
     )
-    .bind(payload.created_by)
+    .bind(payload.user_id)
     .bind(&payload.content)
-    .bind(has_discussion)
     .fetch_one(&mut *tx)
     .await;
 
-    let mut post = match post_result {
+    let post = match post_result {
         Ok(p) => p,
         Err(e) => {
             eprintln!("Failed to insert post: {:?}", e);
@@ -56,7 +55,8 @@ pub async fn create_club_post(
                         eprintln!("Failed to link post to discussion: {:?}", e);
                         return HttpResponse::InternalServerError().json("Failed to link discussion");
                     }
-                post.discussion_id = Some(discussion_id);
+                // The discussion_id is already part of the post struct, but we need to update the DB
+                sqlx::query("UPDATE post SET discussion_id = $1 WHERE id = $2").bind(discussion_id).bind(post.id).execute(&mut *tx).await.ok();
             },
             Err(e) => {
                 eprintln!("Failed to create discussion: {:?}", e);
@@ -84,4 +84,3 @@ pub async fn create_club_post(
         }
     }
 }
-

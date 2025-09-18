@@ -39,7 +39,7 @@ pub async fn create_club_community_post(
     .fetch_one(&mut *tx)
     .await;
 
-    let mut post = match post_result {
+    let post = match post_result {
         Ok(p) => p,
         Err(e) => {
             eprintln!("Failed to insert post: {:?}", e);
