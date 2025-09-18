@@ -3,11 +3,17 @@ use crate::handlers::post::{
     create_post::create_post, delete_post::delete_post, get_post::get_post_by_id,
     list_posts::list_posts, update_post::update_post,
     interaction::{
-        downvote_post, like_post, remove_vote, unlike_post, upvote_post,
-    }
-    comment::interaction::{
-        add_comment, delete_comment, downvote_post, like_post, list_comments, remove_vote,
-        repost_post, share_post, unlike_post, update_comment, upvote_post,
+        downvote_post, 
+        like_post, 
+        remove_vote, 
+        unlike_post, 
+        upvote_post,
+    },
+    comment::{
+        add_comment, 
+        delete_comment, 
+        list_comments, 
+        update_comment,
     },
 };
 
