@@ -1,14 +1,19 @@
 pub mod common;
+pub mod downvote_post;
+pub mod get_interactions;
+pub mod get_post_downvotes;
+pub mod get_post_likes;
+pub mod get_post_upvotes;
 pub mod like_post;
+pub mod remove_vote;
 pub mod unlike_post;
 pub mod upvote_post;
-pub mod downvote_post;
-pub mod remove_vote;
-pub mod get_post_likes;
 
+pub use downvote_post::downvote_post;
+pub use get_post_downvotes::get_post_downvotes;
+pub use get_post_likes::get_post_likes;
+pub use get_post_upvotes::get_post_upvotes;
 pub use like_post::like_post;
+pub use remove_vote::remove_vote;
 pub use unlike_post::unlike_post;
 pub use upvote_post::upvote_post;
-pub use downvote_post::downvote_post;
-pub use remove_vote::remove_vote;
-pub use get_post_likes::get_post_likes;

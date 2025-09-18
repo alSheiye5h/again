@@ -4,11 +4,13 @@ use crate::handlers::post::{
     list_posts::list_posts, update_post::update_post, repost_post, share_post,
     interaction::{
         downvote_post, 
+        get_post_downvotes,
+        get_post_likes,
+        get_post_upvotes,
         like_post, 
         remove_vote, 
         unlike_post, 
         upvote_post,
-        get_post_likes,
     },
     comment::{
         add_comment, 
@@ -48,7 +50,9 @@ pub fn post_routes(cfg: &mut web::ServiceConfig) {
                     .route("/like/{user_id}", web::delete().to(unlike_post))
                     .route("/repost", web::post().to(repost_post))
                     .route("/share", web::post().to(share_post))
+                    .route("/upvote", web::get().to(get_post_upvotes))
                     .route("/upvote", web::post().to(upvote_post))
+                    .route("/downvote", web::get().to(get_post_downvotes))
                     .route("/downvote", web::post().to(downvote_post))
                     .route("/vote/{user_id}", web::delete().to(remove_vote)),
             ),
