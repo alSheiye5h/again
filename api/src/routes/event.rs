@@ -8,6 +8,12 @@ use crate::handlers::event::charity::{
     update_event::update_event, 
     delete_event::delete_event
 };
+use crate::handlers::event::charity::rsvp::{
+    configure_rsvp::configure_rsvp as configure_charity_rsvp,
+    create_rsvp::create_or_update_rsvp as create_or_update_charity_rsvp,
+    delete_rsvp::delete_rsvp as delete_charity_rsvp,
+    get_rsvps::list_rsvps_for_event as list_charity_rsvps_for_event,
+};
 use crate::handlers::event::regular::{
     create_event::create_event as create_regular_event, 
     list_events::list_events as list_regular_events, 
@@ -43,6 +49,13 @@ pub fn event_routes(cfg: &mut web::ServiceConfig) {
                 .route("/{id}", web::get().to(get_event_by_id))
                 .route("/{id}", web::put().to(update_event))
                 .route("/{id}", web::delete().to(delete_event))
+                // Charity Event RSVP routes
+                .service(web::scope("/{id}/rsvp")
+                    .route("", web::get().to(list_charity_rsvps_for_event))
+                    .route("", web::post().to(create_or_update_charity_rsvp))
+                    .route("/configure", web::post().to(configure_charity_rsvp))
+                    .route("/{user_id}", web::delete().to(delete_charity_rsvp))
+                )
         )        
             .service(web::scope("/regular")
                 .route("", web::post().to(create_regular_event))

@@ -1,16 +1,16 @@
 use actix_web::{web, HttpResponse, Responder};
-use crate::models::Event_struct::Event;
 use serde_json::json;
 use sqlx::PgPool;
 
-/// Handler to list all events.
+use crate::models::Event_struct::Event;
+
+/// Handler to list all charity events.
 pub async fn list_events(db_pool: web::Data<PgPool>) -> impl Responder {
-    let result = sqlx::query_as::<_, Event>(r#"
-        SELECT 
-            e.id, e.club_host, e.community_host, e.organizer, e.has_discussion,
-            ed.discussion_id
+    let result = sqlx::query_as::<_, Event>(
+        r#"
+        SELECT e.id, e.club_host, e.community_host, e.organizer, e.has_discussion, ed.discussion_id
         FROM charity_event e
-        LEFT JOIN charity_event_discussion ed ON e.id = ed.event_id
+        LEFT JOIN charity_event_discussions ed ON e.id = ed.event_id
         "#,
     )
     .fetch_all(db_pool.get_ref())
@@ -20,7 +20,10 @@ pub async fn list_events(db_pool: web::Data<PgPool>) -> impl Responder {
         Ok(events) => HttpResponse::Ok().json(events),
         Err(e) => {
             eprintln!("Failed to fetch events: {:?}", e);
-            HttpResponse::InternalServerError().json(json!({"status": "error", "message": "Could not fetch events."}))
+            HttpResponse::InternalServerError().json(json!({
+                "status": "error",
+                "message": format!("Failed to fetch events: {}", e)
+            }))
         }
     }
 }
