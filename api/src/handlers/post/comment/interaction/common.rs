@@ -17,7 +17,7 @@ pub async fn create_interaction(
     let user_id = payload.user_id;
 
     let query = r#"
-        INSERT INTO comment_interaction (user_id, comment_id, interaction_type)
+        INSERT INTO post_comment_interactions (user_id, comment_id, interaction_type)
         VALUES ($1, $2, $3)
         ON CONFLICT (user_id, comment_id, interaction_type) DO NOTHING
         RETURNING *
