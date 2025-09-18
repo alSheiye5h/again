@@ -16,28 +16,56 @@ pub async fn create_interaction(
     let post_id_val = post_id.into_inner();
     let user_id = payload.user_id;
 
-    // Using ON CONFLICT to handle cases where the user has already interacted in the same way.
-    // It also handles updating an upvote to a downvote or vice-versa.
-    let query = r#"
-        INSERT INTO post_interaction (user_id, post_id, interaction_type)
-        VALUES ($1, $2, $3)
-        ON CONFLICT (user_id, post_id, interaction_type) DO NOTHING
-        RETURNING *
-    "#;
+    let mut tx = match db_pool.begin().await {
+        Ok(tx) => tx,
+        Err(e) => {
+            eprintln!("Failed to start transaction: {:?}", e);
+            return HttpResponse::InternalServerError().json(json!({"status": "error", "message": "Failed to start transaction"}));
+        }
+    };
 
-    let result = sqlx::query_as::<_, PostInteraction>(query)
-        .bind(user_id)
-        .bind(post_id_val)
-        .bind(interaction_type)
-        .fetch_optional(db_pool.get_ref())
-        .await;
+    // If the new interaction is a vote, remove any conflicting vote first.
+    if interaction_type == PostInteractionType::Upvote || interaction_type == PostInteractionType::Downvote {
+        let opposite_interaction = if interaction_type == PostInteractionType::Upvote {
+            PostInteractionType::Downvote
+        } else {
+            PostInteractionType::Upvote
+        };
+
+        if let Err(e) = sqlx::query("DELETE FROM post_interaction WHERE user_id = $1 AND post_id = $2 AND interaction_type = $3")
+            .bind(user_id)
+            .bind(post_id_val)
+            .bind(opposite_interaction)
+            .execute(&mut *tx)
+            .await {
+                eprintln!("Failed to remove conflicting vote: {:?}", e);
+                return HttpResponse::InternalServerError().json(json!({"status": "error", "message": "Failed to update vote"}));
+            }
+    }
+
+    // Insert the new interaction. `ON CONFLICT DO NOTHING` handles cases where the user clicks the same button twice.
+    let result = sqlx::query_as::<_, PostInteraction>(
+        r#"
+            INSERT INTO post_interaction (user_id, post_id, interaction_type)
+            VALUES ($1, $2, $3)
+            ON CONFLICT (user_id, post_id, interaction_type) DO NOTHING
+            RETURNING *
+        "#,
+    )
+    .bind(user_id)
+    .bind(post_id_val)
+    .bind(interaction_type)
+    .fetch_optional(&mut *tx)
+    .await;
 
     match result {
-        Ok(Some(interaction)) => HttpResponse::Created().json(interaction),
-        Ok(None) => HttpResponse::Ok().json(json!({
-            "status": "success",
-            "message": "Interaction already exists or was updated."
-        })),
+        Ok(interaction_opt) => {
+            if let Err(e) = tx.commit().await {
+                eprintln!("Failed to commit transaction: {:?}", e);
+                return HttpResponse::InternalServerError().json(json!({"status": "error", "message": "Failed to save interaction"}));
+            }
+            HttpResponse::Created().json(interaction_opt)
+        },
         Err(e) => {
             eprintln!("Failed to create post interaction: {:?}", e);
             HttpResponse::InternalServerError()
