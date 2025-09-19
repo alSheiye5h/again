@@ -1,0 +1,10 @@
+ id |   username    |      name       |       email        |                           password                           | profil_pic |   bio   | deleted 
+----+---------------+-----------------+--------------------+--------------------------------------------------------------+------------+---------+---------
+  2 | anassssssuser | anassssname     | anassssssemail     | anaspass                                                     | anasprofil | anasbio | f
+  1 | anasuserddd   | anasname        | anasemailaaa       | anaspass                                                     | anasprofil | anasbio | t
+  3 | anasuser      | anasname        | anasemail          | $2b$12$twFX2fsQnuJwht.Zvyi4pemG1cJZW7HB1TvFFziuQrN7ixc2INhMe | anasprofil | anasbio | f
+  5 | anasuser      | anasnamvvvvvvve | anasemailvvvvvvvva | anaspass                                                     | anasprofil | anasbio | f
+  6 | anasuser      | anabbbbbbbbbbbe | anasemailbbbbbbbba | $2b$12$J0.ICpTyI8GDgvmYe2HSG.p8vvnNnRZ0pwG1MIIDOH0VJO5vA/vIC | anasprofil | anasbio | f
+  8 | awwwwwwwwwwer | anabbbbbbbbbbbe | anasewwwwwwwwwwba  | $2b$12$GpHpjHyUh01ebPbyhgxPIuCl6DDUN5zbOVGlLmWZrrVioJYQC/Hfa | anasprofil | anasbio | f
+(6 rows)
+

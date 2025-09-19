@@ -1,5 +1,6 @@
 use actix_web::{web, HttpResponse, Responder};
 use crate::models::club_struct::{Club, CreateClubPayload};
+use serde_json::json;
 use sqlx::PgPool;
 
 /// Handler to create a new club.
@@ -13,7 +14,7 @@ pub async fn create_club(
         Ok(tx) => tx,
         Err(e) => {
             eprintln!("Failed to start transaction: {:?}", e);
-            return HttpResponse::InternalServerError().json("Failed to start transaction");
+            return HttpResponse::InternalServerError().json(json!({"status": "error", "message": "Failed to start database transaction."}));
         }
     };
 
@@ -30,9 +31,16 @@ pub async fn create_club(
 
     let club = match club_result {
         Ok(club) => club,
+        Err(sqlx::Error::Database(db_err)) if db_err.code() == Some("23503".into()) => {
+            // This handles foreign key violations, e.g., created_by user does not exist.
+            return HttpResponse::BadRequest().json(json!({
+                "status": "error",
+                "message": "Failed to create club: The specified creator (user) does not exist."
+            }));
+        }
         Err(e) => {
             eprintln!("Failed to create club: {:?}", e);
-            return HttpResponse::InternalServerError().json("Failed to create club.");
+            return HttpResponse::InternalServerError().json(json!({"status": "error", "message": "Failed to create club."}));
         }
     };
 
@@ -50,7 +58,7 @@ pub async fn create_club(
     .await
     {
         eprintln!("Failed to create default community for club: {:?}", e);
-        return HttpResponse::InternalServerError().json("Failed to create default community for club.");
+        return HttpResponse::InternalServerError().json(json!({"status": "error", "message": "Failed to create default community for the club."}));
     }
 
     // Step 3: Add the creator as the first staff member.
@@ -64,15 +72,15 @@ pub async fn create_club(
     .await
     {
         eprintln!("Failed to add creator to club staff: {:?}", e);
-        return HttpResponse::InternalServerError().json("Failed to set club creator as staff.");
+        return HttpResponse::InternalServerError().json(json!({"status": "error", "message": "Failed to set club creator as staff."}));
     }
 
     // Step 4: Commit the transaction and return the new club.
     match tx.commit().await {
         Ok(_) => HttpResponse::Created().json(club),
         Err(e) => {
-            eprintln!("Failed to commit transaction: {:?}", e);
-            HttpResponse::InternalServerError().json("Failed to save club.")
+            eprintln!("Failed to commit transaction while creating club: {:?}", e);
+            HttpResponse::InternalServerError().json(json!({"status": "error", "message": "Failed to commit transaction to save club."}))
         }
     }
 }

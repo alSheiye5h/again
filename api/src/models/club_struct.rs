@@ -6,7 +6,7 @@ pub struct Club {
     pub name: String,
     pub profil_pic: String,
     pub cover_pic: String,
-    pub created_by: Option<i32>,
+    pub created_by: i32,
 }
 
 #[derive(Deserialize)]

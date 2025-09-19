@@ -9,7 +9,6 @@ pub async fn register_user(
     user: web::Json<User>
 ) -> impl Responder {
 
-    println!("touch");
     let user_data = user.into_inner();
 
     // Hash the user's password before storing it
@@ -40,8 +39,6 @@ pub async fn register_user(
 
     match result {
         Ok(record) => {
-            // Print the record to the console
-            println!("Inserted user record: {:?}", record);
 
             // Return success response
             HttpResponse::Ok().json(json!({
