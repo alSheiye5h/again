@@ -6,6 +6,7 @@ pub struct Post {
     pub id: i32,
     pub content: String,
     pub user_id: i32,
+    pub has_discussion: bool,
     pub discussion_id: Option<i32>,
     pub created_at: chrono::DateTime<chrono::Utc>,
     pub updated_at: chrono::DateTime<chrono::Utc>,
