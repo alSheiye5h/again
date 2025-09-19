@@ -14,7 +14,7 @@ pub async fn list_teams(
     match sqlx::query_as!(
         Team,
         r#"
-        SELECT id, created_by
+        SELECT id, created_by, description
         FROM team
         ORDER BY id
         LIMIT $1 OFFSET $2

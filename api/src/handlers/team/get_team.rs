@@ -8,7 +8,7 @@ pub async fn get_team(pool: web::Data<PgPool>, id: web::Path<i32>) -> impl Respo
     match sqlx::query_as!(
         Team,
         r#"
-        SELECT id, created_by
+        SELECT id, created_by, description
         FROM team WHERE id = $1
         "#,
         *id

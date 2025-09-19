@@ -5,12 +5,13 @@ use serde::{Deserialize, Serialize};
 pub struct Team {
     pub id: i32,
     pub created_by: Option<i32>,
+    pub description: Option<String>,
 }
 
 #[derive(Deserialize)]
 pub struct UpdateTeamPayload {
     // Define fields that can be updated for a team
-    pub name: Option<String>,
+    pub description: Option<String>,
 }
 
 
