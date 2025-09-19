@@ -35,7 +35,7 @@ pub fn community_routes(cfg: &mut web::ServiceConfig) {
                     .route("/members", web::post().to(add_community_member))
                     .route("/members", web::get().to(list_community_members))
                     .route("/members/{user_id}", web::get().to(get_community_member))
-                    .route("/members/{user_id}", web::put().to(update_community_member))
+                    .route("/members/{user_id}", web::put().to(update_community_member)) // need to be updatet to member roles not staff
                     .route("/members/{user_id}", web::delete().to(delete_community_member))
                     // Community Staff
                     .route("/staff", web::post().to(add_community_staff))
