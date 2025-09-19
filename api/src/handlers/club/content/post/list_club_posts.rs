@@ -25,21 +25,20 @@ pub async fn list_club_posts(
 
     match sqlx::query_as::<_, Post>(
         r#"
-        SELECT p.*
+        SELECT p.id, p.user_id, p.content, p.created_at, p.updated_at, pd.discussion_id
         FROM post p
         JOIN club_post cp ON p.id = cp.post_id
+        LEFT JOIN post_discussion pd ON p.id = pd.post_id
         WHERE cp.club_id = $1
+        ORDER BY p.created_at DESC
         "#,
     )
     .bind(club_id)
     .fetch_all(&**db_pool)
     .await
     {
-        Ok(posts) => HttpResponse::Ok().json(posts),
-        Err(sqlx::Error::RowNotFound) => {
-            HttpResponse::Ok().json(json!([])) // Return an empty array if no posts are found
-        },
-        Err(e) => { // Handle other potential database errors
+        Ok(posts) => HttpResponse::Ok().json(posts), // fetch_all returns an empty Vec if no rows are found, which serializes to []
+        Err(e) => {
             eprintln!("Failed to list club posts: {:?}", e);
             HttpResponse::InternalServerError()
                 .json(json!({"status": "error", "message": "Failed to list posts for the club."}))

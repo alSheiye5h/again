@@ -65,9 +65,10 @@ pub async fn create_club_post(
     }
 
     // Step 3: Link the post to the club in the `club_post` table.
-    if let Err(e) = sqlx::query("INSERT INTO club_post (post_id, club_id) VALUES ($1, $2)")
+    if let Err(e) = sqlx::query("INSERT INTO club_post (post_id, club_id, has_discussion) VALUES ($1, $2, $3)")
         .bind(post.id)
         .bind(club_id_val)
+        .bind(has_discussion)
         .execute(&mut *tx)
         .await {
         eprintln!("Failed to link post to club: {:?}", e);

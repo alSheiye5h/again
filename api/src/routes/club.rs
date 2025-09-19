@@ -58,16 +58,16 @@ pub fn club_routes(cfg: &mut web::ServiceConfig) {
                     .route("", web::delete().to(delete_club))
                     // Club Members
                     .service(
-                        web::scope("/members")
+                        web::scope("/members") // GET /club/{club_id}/members
                             .route("", web::post().to(add_member))
                             .route("", web::get().to(list_members))
-                            .route("/{user_id}", web::get().to(get_member))
-                            .route("/{user_id}", web::delete().to(remove_member)),
+                            .route("/{user_id}", web::get().to(get_member)) // GET /club/{club_id}/members/{user_id}
+                            .route("/{user_id}", web::delete().to(remove_member)), // DELETE /club/{club_id}/members/{user_id}
                     )
                     // Club Staff
                     .service(
-                        web::scope("/staff")
-                            .route("", web::post().to(add_staff))
+                        web::scope("/staff") // GET /club/{club_id}/staff
+                            .route("", web::post().to(add_staff)) 
                             .route("", web::get().to(list_staff))
                             .route("/{user_id}", web::get().to(get_staff))
                             .route("/{user_id}", web::delete().to(remove_staff_member)),
