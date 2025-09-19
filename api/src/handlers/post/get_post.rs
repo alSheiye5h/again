@@ -10,9 +10,8 @@ pub async fn get_post_by_id(
 ) -> impl Responder {
     let result = sqlx::query_as::<_, Post>(
         r#"
-        SELECT p.id, p.content, p.created_by, p.has_discussion, pd.discussion_id
+        SELECT p.*
         FROM post p
-        LEFT JOIN post_discussion pd ON p.id = pd.post_id
         WHERE p.id = $1
         "#,
     )

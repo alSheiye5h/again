@@ -25,11 +25,9 @@ pub async fn list_community_posts(
 
     match sqlx::query_as::<_, Post>(
         r#"
-        SELECT p.id, p.content, p.created_by, p.has_discussion,
-               cp.community_id, pd.discussion_id
+        SELECT p.*
         FROM post p
         JOIN community_post cp ON p.id = cp.post_id
-        LEFT JOIN post_discussion pd ON p.id = pd.post_id
         WHERE cp.community_id = $1
         "#,
     )

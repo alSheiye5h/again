@@ -12,15 +12,9 @@ pub async fn update_post(
     let result = sqlx::query_as::<_, Post>(
         r#"
         WITH updated AS (
-            UPDATE post
-            SET content = $1
-            WHERE id = $2
-            RETURNING id, content, created_by, has_discussion
+            UPDATE post SET content = $1 WHERE id = $2 RETURNING *
         )
-        SELECT u.id, u.content, u.created_by, u.has_discussion, pd.discussion_id
-        FROM updated u
-        LEFT JOIN post_discussion pd ON u.id = pd.post_id
-
+        SELECT * FROM updated
         "#,
     )
     .bind(&payload.content)
