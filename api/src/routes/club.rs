@@ -40,7 +40,7 @@ use crate::handlers::club::{
     list_clubs::list_clubs,
     member::{add_club_member::add_member, delete_club_member::remove_member, get_club_member::get_member, list_club_members::list_members},
     staff::{
-        add_club_staff::add_staff, delete_club_staff::remove_staff as remove_staff_member,
+        add_club_staff::add_staff, delete_club_staff::remove_staff as remove_staff_member, update_club_staff::update_staff,
         get_club_staff::get_staff, list_club_staff::list_staff,
     },
     update_club::update_club,
@@ -70,7 +70,8 @@ pub fn club_routes(cfg: &mut web::ServiceConfig) {
                             .route("", web::post().to(add_staff)) 
                             .route("", web::get().to(list_staff))
                             .route("/{user_id}", web::get().to(get_staff))
-                            .route("/{user_id}", web::delete().to(remove_staff_member)),
+                            .route("/{user_id}", web::delete().to(remove_staff_member))
+                            .route("/{user_id}", web::put().to(update_staff)),
                     )
                     // Content routes (posts, AMAs, pools, etc.)
                     .service(
