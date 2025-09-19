@@ -13,7 +13,9 @@ pub async fn delete_community(
         .await;
 
     match result {
-        Ok(res) if res.rows_affected() > 0 => HttpResponse::NoContent().finish(),
+        Ok(res) if res.rows_affected() > 0 => {
+            HttpResponse::Ok().json(json!({"status": "success", "message": "Community deleted successfully."}))
+        }
         Ok(_) => HttpResponse::NotFound().json(json!({"status": "error", "message": "Community not found."})),
         Err(e) => {
             eprintln!("Failed to delete community: {:?}", e);
