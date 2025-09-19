@@ -39,6 +39,7 @@ async fn main() -> std::io::Result<()> {
                         .configure(routes::discussion::discussion_routes)
                         .configure(routes::event::event_routes)
                         .configure(routes::user::user_routes)
+                        .configure(routes::team::team_routes)
                 );
             })
     })

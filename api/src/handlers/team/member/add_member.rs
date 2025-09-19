@@ -25,6 +25,17 @@ pub async fn add_member(
             HttpResponse::Created().json(json!({"status": "success", "message": "User added to team successfully."}))
         }
         Ok(_) => HttpResponse::Ok().json(json!({"status": "success", "message": "User is already a member of this team."})),
-        Err(e) => HttpResponse::InternalServerError().json(json!({"status": "error", "message": format!("Failed to add member to team: {}", e)})),
+        Err(sqlx::Error::Database(db_err)) if db_err.code() == Some("23503".into()) => {
+            // Foreign key violation
+            eprintln!("Failed to add team member due to foreign key violation: {:?}", db_err);
+            HttpResponse::BadRequest().json(json!({
+                "status": "error",
+                "message": "Failed to add member. The specified team or user does not exist."
+            }))
+        }
+        Err(e) => {
+            eprintln!("Failed to add team member: {:?}", e);
+            HttpResponse::InternalServerError().json(json!({"status": "error", "message": format!("Failed to add member to team: {}", e)}))
+        }
     }
 }
