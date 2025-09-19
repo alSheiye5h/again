@@ -25,7 +25,6 @@ use crate::handlers::post::{
     },
 };
 
-
 pub fn post_routes(cfg: &mut web::ServiceConfig) {
     cfg.service(
         web::scope("/post")

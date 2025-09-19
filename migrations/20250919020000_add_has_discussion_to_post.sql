@@ -1,0 +1,9 @@
+-- Add migration script here
+ALTER TABLE post
+ADD COLUMN has_discussion BOOLEAN NOT NULL DEFAULT FALSE;
+
+ALTER TABLE community_post
+ADD COLUMN has_discussion BOOLEAN NOT NULL DEFAULT FALSE;
+
+ALTER TABLE club_post
+ADD COLUMN has_discussion BOOLEAN NOT NULL DEFAULT FALSE;
