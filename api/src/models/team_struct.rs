@@ -17,9 +17,10 @@ pub struct UpdateTeamPayload {
 
 /// Payload for creating a new team.
 
-#[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
+#[derive(Debug, Deserialize)]
 pub struct CreateTeamPayload {
     pub created_by: i32,
+    pub description: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
