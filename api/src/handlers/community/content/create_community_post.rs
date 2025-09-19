@@ -20,8 +20,8 @@ pub async fn create_community_post(
     };
 
     // Step 1: Create the post in the `post` table.
-    let post_result = sqlx::query_as::<_, Post>(
-        "INSERT INTO post (user_id, content, has_discussion) VALUES ($1, $2, $3) RETURNING *",
+    let post_result = sqlx::query_as::<_, (i32, chrono::DateTime<chrono::Utc>, chrono::DateTime<chrono::Utc>)>(
+        "INSERT INTO post (user_id, content, has_discussion) VALUES ($1, $2, $3) RETURNING id, created_at, updated_at",
     )
     .bind(payload.user_id)
     .bind(&payload.content)
@@ -32,10 +32,13 @@ pub async fn create_community_post(
     let post = match post_result {
         Ok(p) => p,
         Err(e) => {
-            eprintln!("Failed to insert post: {:?}", e);
-            return HttpResponse::InternalServerError().json("Failed to create post");
+            eprintln!("Failed to insert post: {:?}", e); let _ = tx.rollback().await;
+            return HttpResponse::InternalServerError().json(json!({"status": "error", "message": "Failed to create post"}));
         }
     };
+    let (post_id, created_at, updated_at) = post;
+
+    let mut discussion_id_final = None;
 
     // Step 2: If requested, create a discussion and link it to the post.
     if has_discussion {
@@ -47,16 +50,19 @@ pub async fn create_community_post(
 
         match discussion_id_result {
             Ok(discussion_id) => {
+                discussion_id_final = Some(discussion_id);
                 if let Err(e) = sqlx::query("INSERT INTO post_discussion (post_id, discussion_id) VALUES ($1, $2)")
-                    .bind(post.id)
+                    .bind(post_id)
                     .bind(discussion_id)
                     .execute(&mut *tx)
                     .await {
                         eprintln!("Failed to link post to discussion: {:?}", e);
+                        let _ = tx.rollback().await;
                         return HttpResponse::InternalServerError().json("Failed to link discussion");
                     }
             },
             Err(e) => {
+                let _ = tx.rollback().await;
                 eprintln!("Failed to create discussion: {:?}", e);
                 return HttpResponse::InternalServerError().json("Failed to create discussion");
             }
@@ -65,16 +71,28 @@ pub async fn create_community_post(
 
     // Step 3: Link the post to the community in the `community_post` table.
     if let Err(e) = sqlx::query("INSERT INTO community_post (post_id, community_id) VALUES ($1, $2)")
-        .bind(post.id)
+        .bind(post_id)
         .bind(community_id)
         .execute(&mut *tx)
         .await {
         eprintln!("Failed to link post to community: {:?}", e);
+        let _ = tx.rollback().await;
         return HttpResponse::InternalServerError().json(json!({"status": "error", "message": "Failed to link post to community."}));
     }
 
     match tx.commit().await {
-        Ok(_) => HttpResponse::Created().json(post),
+        Ok(_) => {
+            let created_post = Post {
+                id: post_id,
+                content: payload.content.clone(),
+                user_id: payload.user_id,
+                has_discussion,
+                discussion_id: discussion_id_final,
+                created_at,
+                updated_at,
+            };
+            HttpResponse::Created().json(created_post)
+        }
         Err(e) => {
             eprintln!("Failed to commit transaction: {:?}", e);
             HttpResponse::InternalServerError().json("Failed to save post")
