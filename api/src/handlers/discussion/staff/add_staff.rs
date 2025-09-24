@@ -1,4 +1,4 @@
-use crate::models::discussion_struct::{AddStaffPayload, MemberRole};
+use crate::models::discussion_struct::{AddStaffPayload};
 use actix_web::{web, HttpResponse, Responder};
 use serde_json::json;
 use sqlx::PgPool;

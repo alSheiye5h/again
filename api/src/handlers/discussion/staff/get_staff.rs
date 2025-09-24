@@ -1,4 +1,4 @@
-use crate::models::discussion_struct::{DiscussionMemberInfo, MemberRole};
+use crate::models::discussion_struct::{DiscussionMemberInfo};
 use actix_web::{web, HttpResponse, Responder};
 use serde_json::json;
 use sqlx::PgPool;
@@ -12,15 +12,14 @@ pub async fn get_staff(
 
     let result = sqlx::query_as::<_, DiscussionMemberInfo>(
         r#"
-        SELECT u.id as user_id, u.username, dm.role
+        SELECT u.id as user_id, u.username, ds.role
         FROM users u
-        JOIN discussion_members dm ON u.id = dm.user_id
-        WHERE dm.discussion_id = $1 AND dm.user_id = $2 AND dm.role = $3
+        JOIN discussion_staff ds ON u.id = ds.user_id
+        WHERE ds.discussion_id = $1 AND ds.user_id = $2
         "#,
     )
     .bind(discussion_id)
     .bind(user_id)
-    .bind(MemberRole::Staff)
     .fetch_optional(db_pool.get_ref())
     .await;
 

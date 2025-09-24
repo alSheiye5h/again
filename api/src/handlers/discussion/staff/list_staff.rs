@@ -13,11 +13,10 @@ pub async fn list_staff(
         SELECT u.id as user_id, u.username, ds.promoted_by, ds.role
         FROM users u
         JOIN discussion_staff ds ON u.id = ds.user_id
-        WHERE ds.discussion_id = $1 AND ds.role = $2
+        WHERE ds.discussion_id = $1
         "#,
     )
     .bind(discussion_id.into_inner())
-    .bind(MemberRole::Staff)
     .fetch_all(db_pool.get_ref())
     .await;
 
