@@ -93,15 +93,9 @@ pub struct AddMemberPayload {
 pub struct AddStaffPayload {
     pub user_id: i32,
     pub promoted_by: i32,
-}
-
-#[derive(Deserialize)]
-pub struct AddStaffFullPayload {
-    pub user_id: i32,
-    pub promoted_by: i32,
-    pub discussion_id: i32,
     pub role: MemberRole,
 }
+
 
 #[derive(Debug, Serialize, sqlx::FromRow)]
 pub struct DiscussionMemberInfo {

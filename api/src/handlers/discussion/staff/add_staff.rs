@@ -1,14 +1,15 @@
-use crate::models::discussion_struct::AddStaffFullPayload;
+use crate::models::discussion_struct::{AddStaffPayload, MemberRole};
 use actix_web::{web, HttpResponse, Responder};
 use serde_json::json;
 use sqlx::PgPool;
 
 /// Handler to add a user as a staff member to a discussion.
 /// This uses an "upsert" logic: if the user is already a staff member, their record is updated.
-/// If they are not, they are added.
+/// If they are not, they are added as staff.
 pub async fn add_staff(
     db_pool: web::Data<PgPool>,
-    payload: web::Json<AddStaffFullPayload>,
+    discussion_id: web::Path<i32>,
+    payload: web::Json<AddStaffPayload>,
 ) -> impl Responder {
     let result = sqlx::query(
         r#"
@@ -19,7 +20,7 @@ pub async fn add_staff(
         "#,
     )
     .bind(payload.user_id)
-    .bind(payload.discussion_id)
+    .bind(discussion_id.into_inner())
     .bind(payload.promoted_by)
     .bind(payload.role)
     .execute(db_pool.get_ref())
