@@ -10,7 +10,7 @@ pub async fn delete_community_member(
     let (community_id, user_id) = path.into_inner();
 
     let result = sqlx::query(
-        "DELETE FROM community_members WHERE community_id = $1 AND user_id = $2 AND role = 'member'",
+        "DELETE FROM community_members WHERE community_id = $1 AND user_id = $2",
     )
     .bind(community_id)
     .bind(user_id)
