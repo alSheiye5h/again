@@ -11,10 +11,9 @@ pub async fn delete_staff(
 ) -> impl Responder {
     let (discussion_id, user_id) = path.into_inner();
 
-    let result = sqlx::query("DELETE FROM discussion_members WHERE discussion_id = $1 AND user_id = $2 AND role = $3")
+    let result = sqlx::query("DELETE FROM discussion_staff WHERE discussion_id = $1 AND user_id = $2")
         .bind(discussion_id)
         .bind(user_id)
-        .bind(MemberRole::Staff)
         .execute(db_pool.get_ref())
         .await;
 

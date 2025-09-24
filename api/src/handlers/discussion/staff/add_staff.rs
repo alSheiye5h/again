@@ -4,8 +4,7 @@ use serde_json::json;
 use sqlx::PgPool;
 
 /// Handler to add a user as a staff member to a discussion.
-/// This uses an "upsert" logic: if the user is already a staff member, their record is updated.
-/// If they are not, they are added as staff.
+/// Returns an error if the user is already a staff member.
 pub async fn add_staff(
     db_pool: web::Data<PgPool>,
     discussion_id: web::Path<i32>,
@@ -15,8 +14,6 @@ pub async fn add_staff(
         r#"
         INSERT INTO discussion_staff (user_id, discussion_id, promoted_by, role)
         VALUES ($1, $2, $3, $4)
-        ON CONFLICT (user_id, discussion_id) DO UPDATE 
-        SET role = EXCLUDED.role, promoted_by = EXCLUDED.promoted_by
         "#,
     )
     .bind(payload.user_id)
@@ -27,10 +24,25 @@ pub async fn add_staff(
     .await;
 
     match result {
-        Ok(_) => HttpResponse::Ok().json(json!({"status": "success", "message": "Staff member added or updated successfully."})),
+        Ok(_) => HttpResponse::Created().json(json!({"status": "success", "message": "Staff member added successfully."})),
+        Err(sqlx::Error::Database(db_err)) => {
+            if db_err.is_unique_violation() {
+                return HttpResponse::Conflict().json(json!({
+                    "status": "error",
+                    "message": "User is already a staff member in this discussion."
+                }));
+            } else if db_err.is_foreign_key_violation() {
+                return HttpResponse::BadRequest().json(json!({
+                    "status": "error",
+                    "message": "Failed to add staff. The specified discussion, user, or promoter does not exist."
+                }));
+            }
+            eprintln!("Database error while adding discussion staff: {:?}", db_err);
+            HttpResponse::InternalServerError().json(json!({"status": "error", "message": "A database error occurred."}))
+        }
         Err(e) => {
             eprintln!("Failed to add discussion staff: {:?}", e);
-            HttpResponse::InternalServerError().json(json!({"status": "error", "message": "Failed to add staff member. Ensure discussion and user exist."}))
+            HttpResponse::InternalServerError().json(json!({"status": "error", "message": "An unexpected error occurred."}))
         }
     }
 }
