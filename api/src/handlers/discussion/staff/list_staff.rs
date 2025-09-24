@@ -10,10 +10,10 @@ pub async fn list_staff(
 ) -> impl Responder {
     let result = sqlx::query_as::<_, DiscussionMemberInfo>(
         r#"
-        SELECT u.id as user_id, u.username, dm.role
+        SELECT u.id as user_id, u.username, ds.promoted_by, ds.role
         FROM users u
-        JOIN discussion_members dm ON u.id = dm.user_id
-        WHERE dm.discussion_id = $1 AND dm.role = $2
+        JOIN discussion_staff ds ON u.id = ds.user_id
+        WHERE ds.discussion_id = $1 AND ds.role = $2
         "#,
     )
     .bind(discussion_id.into_inner())
