@@ -47,8 +47,8 @@ pub fn discussion_routes(cfg: &mut web::ServiceConfig) {
                     .route("/members/{user_id}", web::put().to(update_discussion_member_role))
                     .route("/members/{user_id}", web::delete().to(remove_discussion_member))
                     // Discussion Staff
-                    .route("/staff", web::get().to(list_staff)) // list_staff still needs discussion_id from path
-                    .route("/staff", web::post().to(add_staff)) // This is now handled by the top-level route
+                    .route("/staff", web::get().to(list_staff))
+                    .route("/staff", web::post().to(add_staff))
                     .route("/staff/{user_id}", web::get().to(get_staff))
                     .route("/staff/{user_id}", web::put().to(update_staff_role))
                     .route("/staff/{user_id}", web::delete().to(delete_staff))
