@@ -24,6 +24,10 @@ use crate::handlers::discussion::content::announcement::{
     list_discussion_announcement::list_discussion_announcements,
     update_discussion_announcement::update_discussion_announcement,
 };
+use crate::handlers::discussion::staff::{
+    add_staff::add_staff, delete_staff::delete_staff, get_staff::get_staff,
+    list_staff::list_staff, update_staff::update_staff_role,
+};
 use actix_web::web;
 
 pub fn discussion_routes(cfg: &mut web::ServiceConfig) {
@@ -43,11 +47,11 @@ pub fn discussion_routes(cfg: &mut web::ServiceConfig) {
                     .route("/members/{user_id}", web::put().to(update_discussion_member_role))
                     .route("/members/{user_id}", web::delete().to(remove_discussion_member))
                     // Discussion Staff
-                    .route("/staff", web::get().to(crate::handlers::discussion::staff::list_staff::list_staff))
-                    .route("/staff", web::post().to(crate::handlers::discussion::staff::add_staff::add_staff))
-                    .route("/staff/{user_id}", web::get().to(crate::handlers::discussion::staff::get_staff::get_staff))
-                    .route("/staff/{user_id}", web::put().to(crate::handlers::discussion::staff::update_staff::update_staff_role))
-                    .route("/staff/{user_id}", web::delete().to(crate::handlers::discussion::staff::delete_staff::delete_staff))
+                    .route("/staff", web::get().to(list_staff))
+                    .route("/staff", web::post().to(add_staff))
+                    .route("/staff/{user_id}", web::get().to(get_staff))
+                    .route("/staff/{user_id}", web::put().to(update_staff_role))
+                    .route("/staff/{user_id}", web::delete().to(delete_staff))
                     // Discussion Messages
                     .route("/messages", web::get().to(list_discussion_messages))
                     .route("/messages", web::post().to(create_discussion_message))
