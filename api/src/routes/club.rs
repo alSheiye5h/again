@@ -1,4 +1,4 @@
-use actix_web::web;
+use actix_web::web::{self, service};
 
 use crate::handlers::club::{
     content::event::list_club_events::list_club_events,
