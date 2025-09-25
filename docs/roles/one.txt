@@ -1,0 +1,34 @@
+{
+  "owner": ["*"],
+
+  "admin": [
+    "manage_community", "manage_roles", "view_full_analytics",
+    "full_moderation", "moderate_content", "trusted_privileges", "basic_privileges"
+  ],
+
+  "senior_moderator": [
+    "full_moderation", "moderate_content",
+    "trusted_privileges", "basic_privileges"
+  ],
+
+  "moderator": [
+    "moderate_content", "trusted_privileges", "basic_privileges"
+  ],
+
+  "junior_moderator": [
+    "limited_moderation", "trusted_privileges", "basic_privileges"
+  ],
+
+  "trusted": [
+    "trusted_privileges", "basic_privileges"
+  ],
+
+  "member": [
+    "basic_privileges"
+  ],
+
+  "new_member": [
+    "restricted_privileges"
+  ],
+  "banned": []
+}
